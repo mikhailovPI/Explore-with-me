@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.pracricum.ewmservice.category.model.Category;
-import ru.pracricum.ewmservice.location.model.Location;
+import ru.pracricum.ewmservice.categories.model.Categories;
 import ru.pracricum.ewmservice.user.model.User;
 
 import javax.persistence.*;
@@ -28,39 +27,40 @@ public class Event {
     @Column(name = "event_annotation")
     String annotation;
 
-    @Column(name = "event_description")
-    String description;
-
     @OneToOne
     @JoinColumn(name = "category_id")
-    Category category;
+    Categories categories;
 
     @Column(name = "conformed_requests")
     Integer conformedRequests;
 
-    @Column(name = "participant_limit")
-    Integer participantLimit;
+    @Column(name = "created_on")
+    LocalDateTime createdOn;
+
+    @Column(name = "event_description")
+    String description;
+
+    @Column(name = "event_data")
+    LocalDateTime eventData;
 
     @OneToOne
     @JoinColumn(name = "initiator_id")
     User initiator;
 
-    @OneToOne
-    @JoinColumn(name = "location_id")
-    Location location;
+    @Column(name = "lap")
+    Double lap;
 
-    @Column(name = "created_on")
-    LocalDateTime createdOn;
+    @Column(name = "lon")
+    Double lon;
 
-    @Column(name = "event_data")
-    LocalDateTime eventData;
+    @Column(name = "paid")
+    Boolean paid;
+
+    @Column(name = "participant_limit")
+    Integer participantLimit;
 
     @Column(name = "request_moderation")
-    LocalDateTime requestModeration;
-
-    @OneToOne
-    @JoinColumn(name = "price_id")
-    Price price;
+    LocalDateTime publishedOn;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state")

@@ -1,12 +1,16 @@
-package ru.pracricum.ewmservice.user.model;
+package ru.pracricum.ewmservice.compilation.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import ru.pracricum.ewmservice.event.dto.EventShortDto;
+import ru.pracricum.ewmservice.event.model.Event;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,16 +18,16 @@ import javax.persistence.*;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "users", schema = "public")
-public class User {
+public class Compilation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "compilation_id")
     Long id;
 
-    @Column(name = "user_name")
-    String name;
+    @Column(name = "pinned")
+    Boolean pinned;
 
-    @Column(name = "email")
-    String email;
+    @Column(name = "title")
+    String title;
 }

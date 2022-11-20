@@ -1,5 +1,4 @@
-package ru.pracricum.ewmservice.category.model;
-
+package ru.pracricum.ewmservice.requests.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,15 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "categories", schema = "public")
-public class Category {
+@Table(name = "requests", schema = "public")
+public class Requests {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "category_id")
+    @Column(name = "event_id")
     Long id;
-
-    @Column(name = "category_name")
-    String name;
 
 }

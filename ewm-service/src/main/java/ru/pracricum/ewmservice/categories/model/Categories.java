@@ -1,4 +1,5 @@
-package ru.pracricum.ewmservice.location.model;
+package ru.pracricum.ewmservice.categories.model;
+
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,17 +14,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "location", schema = "public")
-public class Location {
+@Table(name = "categories", schema = "public")
+public class Categories {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "location_id")
+    @Column(name = "category_id")
     Long id;
 
-    @Column(name = "lap")
-    Float lap;
+    @Column(name = "category_name")
+    String name;
 
-    @Column(name = "lon")
-    Float lon;
 }

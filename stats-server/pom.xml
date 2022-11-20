@@ -15,8 +15,6 @@
     <name>stats-server</name>
     <description>stats-server</description>
 
-
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
