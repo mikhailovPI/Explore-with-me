@@ -1,6 +1,5 @@
 package ru.pracricum.ewmservice.categories.model;
 
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -15,18 +15,21 @@ public class CategoriesAdminController {
 
     private final CategoriesService categoriesService;
 
-    @PostMapping(path = "/admin/categories")
-    public CategoriesDto createCategory (CategoriesDto categoriesDto) {
+    @PostMapping
+    public CategoriesDto createCategory (@RequestBody CategoriesDto categoriesDto) {
+        log.info("URL: /admin/categories. PostMapping/Создание категории");
         return categoriesService.createCategory(categoriesDto);
     }
 
-    @PatchMapping(path = "/admin/categories")
-    public CategoriesDto patchCategory () {
-        return categoriesService.patchCategory();
+    @PatchMapping
+    public CategoriesDto patchCategory (@RequestBody CategoriesDto categoriesDto) {
+        log.info("URL: /admin/categories. PatchMapping/Изменение категории");
+        return categoriesService.patchCategory(categoriesDto);
     }
 
-    @DeleteMapping(path = "/admin/categories/{catId}")
+    @DeleteMapping(path = "/{catId}")
     public void deleteCategory (@PathVariable Long catId) {
-        categoriesService.deleteCategory(catId);
+        log.info("URL: /admin/categories/{catId}. DeleteMapping/Удаление категории");
+        categoriesService.deleteCategoryById(catId);
     }
 }
