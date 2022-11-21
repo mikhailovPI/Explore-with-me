@@ -8,6 +8,7 @@ import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
 import ru.pracricum.ewmservice.categories.mapper.CategoriesMapper;
 import ru.pracricum.ewmservice.categories.model.Categories;
 import ru.pracricum.ewmservice.categories.repository.CategoriesRepository;
+import ru.pracricum.ewmservice.exception.ConflictingRequestException;
 import ru.pracricum.ewmservice.exception.NotFoundException;
 
 import java.util.List;
@@ -40,6 +41,12 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     @Transactional
     public CategoriesDto createCategory(CategoriesDto categoriesDto) {
+        categoriesRepository.findByNameOrderByName()
+                .stream()
+                .filter(name -> name.equals(categoriesDto.getName())).forEachOrdered(name -> {
+                    throw new ConflictingRequestException(
+                            String.format("Категрия с названием %s - уже существует", name));
+                });
         Categories categories = CategoriesMapper.toCategory(categoriesDto);
         Categories categoriesSave = categoriesRepository.save(categories);
         return CategoriesMapper.toCategoryDto(categoriesSave);
@@ -48,6 +55,12 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     @Transactional
     public CategoriesDto patchCategory(CategoriesDto categoriesDto) {
+        categoriesRepository.findByNameOrderByName()
+                .stream()
+                .filter(name -> name.equals(categoriesDto.getName())).forEachOrdered(name -> {
+                    throw new ConflictingRequestException(
+                            String.format("Категрия с названием %s - уже существует", name));
+                });
         Categories categories = CategoriesMapper.toCategory(categoriesDto);
         Categories categoriesUpdate = categoriesRepository.findById(categories.getId())
                 .orElseThrow(() -> new NotFoundException(

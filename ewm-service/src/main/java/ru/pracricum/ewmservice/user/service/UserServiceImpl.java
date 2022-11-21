@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.pracricum.ewmservice.PageRequestOverride;
+import ru.pracricum.ewmservice.exception.ConflictingRequestException;
 import ru.pracricum.ewmservice.exception.NotFoundException;
 import ru.pracricum.ewmservice.exception.ValidationException;
 import ru.pracricum.ewmservice.user.dto.UserDto;
@@ -46,6 +47,13 @@ public class UserServiceImpl implements UserService {
         if (!userDto.getEmail().contains("@")) {
             throw new ValidationException("Введен некорректный e-mail.");
         }
+        userRepository.findByNameOrderByName()
+                .stream()
+                .filter(name -> name.equals(userDto.getName()))
+                .forEachOrdered(name -> {
+                    throw new ConflictingRequestException(
+                            String.format("Пользователь с именем %s - уже существует", name));
+                });
         User user = UserMapper.toUser(userDto);
         User userSave = userRepository.save(user);
         return UserMapper.toUserDto(userSave);
