@@ -2,7 +2,7 @@ package ru.pracricum.ewmservice.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.pracricum.ewmservice.PageRequestOverride;
+import ru.pracricum.ewmservice.util.PageRequestOverride;
 import ru.pracricum.ewmservice.user.model.User;
 
 import java.util.List;

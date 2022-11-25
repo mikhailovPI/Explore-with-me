@@ -3,13 +3,13 @@ package ru.pracricum.ewmservice.categories.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.pracricum.ewmservice.PageRequestOverride;
+import ru.pracricum.ewmservice.exception.NotExistObjectException;
+import ru.pracricum.ewmservice.util.PageRequestOverride;
 import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
 import ru.pracricum.ewmservice.categories.mapper.CategoriesMapper;
 import ru.pracricum.ewmservice.categories.model.Categories;
 import ru.pracricum.ewmservice.categories.repository.CategoriesRepository;
 import ru.pracricum.ewmservice.exception.ConflictingRequestException;
-import ru.pracricum.ewmservice.exception.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     public CategoriesDto getCategoryById(Long catId) {
         Categories categories = categoriesRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException(
+                .orElseThrow(() -> new NotExistObjectException(
                         String.format("Категория %s не существует.", catId)));
         return CategoriesMapper.toCategoryDto(categories);
     }
@@ -63,7 +63,7 @@ public class CategoriesServiceImpl implements CategoriesService {
                 });
         Categories categories = CategoriesMapper.toCategory(categoriesDto);
         Categories categoriesUpdate = categoriesRepository.findById(categories.getId())
-                .orElseThrow(() -> new NotFoundException(
+                .orElseThrow(() -> new NotExistObjectException(
                         String.format("Категория %s не существует.", categoriesDto.getId())));
         categoriesUpdate.setName(categories.getName());
         return CategoriesMapper.toCategoryDto(categoriesUpdate);
@@ -73,7 +73,7 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Transactional
     public void deleteCategoryById(Long catId) {
         categoriesRepository.findById(catId)
-                .orElseThrow(() -> new NotFoundException(
+                .orElseThrow(() -> new NotExistObjectException(
                         String.format("Категория %s не существует.", catId)));
         categoriesRepository.deleteById(catId);
     }

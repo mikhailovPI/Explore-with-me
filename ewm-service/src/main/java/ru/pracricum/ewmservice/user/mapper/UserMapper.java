@@ -1,6 +1,5 @@
 package ru.pracricum.ewmservice.user.mapper;
 
-import ru.pracricum.ewmservice.requests.dto.NewUserRequest;
 import ru.pracricum.ewmservice.user.dto.UserDto;
 import ru.pracricum.ewmservice.user.dto.UserShortDto;
 import ru.pracricum.ewmservice.user.model.User;

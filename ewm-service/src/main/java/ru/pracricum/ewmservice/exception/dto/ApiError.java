@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import ru.pracricum.ewmservice.exception.ErrorStatusEwm;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,13 +18,15 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApiError {
 
-    List<String> errors;
+    List<String> errors = new ArrayList<>();
 
     String message;
 
     String reason;
 
-    String status;
+    ErrorStatusEwm status;
 
-    String timeStamp;
+    LocalDateTime timeStamp =  LocalDateTime.now();
 }
+
+

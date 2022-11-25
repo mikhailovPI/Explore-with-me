@@ -25,6 +25,13 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFound404Exception(final NotExistObjectException e) {
+        log.info("404 {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictingRequestException(final ConflictingRequestException e) {
         log.info("409 {}", e.getMessage(), e);

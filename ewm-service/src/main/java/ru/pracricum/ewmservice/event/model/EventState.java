@@ -2,8 +2,18 @@ package ru.pracricum.ewmservice.event.model;
 
 public enum EventState {
     PENDING,
-    ENUM_2,
-    ENUM_3,
-    ENUM_4,
-    ENUM_5
+    PUBLISHED,
+    REJECTED,
+    CANCELED;
+
+    public static EventState from(String text) {
+        for (EventState state : EventState.values()) {
+            if (state.name().equalsIgnoreCase(text)) {
+                return state;
+            }
+        }
+        return null;
+    }
 }
+
+

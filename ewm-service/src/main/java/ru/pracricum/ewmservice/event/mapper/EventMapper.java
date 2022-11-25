@@ -4,9 +4,9 @@ import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
 import ru.pracricum.ewmservice.categories.model.Categories;
 import ru.pracricum.ewmservice.event.dto.*;
 import ru.pracricum.ewmservice.event.model.Event;
+import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.event.model.Location;
 import ru.pracricum.ewmservice.user.dto.UserShortDto;
-import ru.pracricum.ewmservice.user.model.User;
 
 public class EventMapper {
 
@@ -14,22 +14,18 @@ public class EventMapper {
         return new Event(
                 eventFullDto.getId(),
                 eventFullDto.getAnnotation(),
-                new Categories(
-                        eventFullDto.getCategory().getId(),
-                        eventFullDto.getCategory().getName()),
+                null,
                 eventFullDto.getConformedRequests(),
                 eventFullDto.getCreatedOn(),
                 eventFullDto.getDescription(),
-                eventFullDto.getEventData(),
-                new User(
-                        eventFullDto.getInitiator().getId(),
-                        eventFullDto.getInitiator().getName(),
-                        null),
-                eventFullDto.getLocation().getLap(),
+                eventFullDto.getEventDate(),
+                null,
+                eventFullDto.getLocation().getLat(),
                 eventFullDto.getLocation().getLon(),
                 eventFullDto.getPaid(),
                 eventFullDto.getParticipantLimit(),
                 eventFullDto.getPublishedOn(),
+                eventFullDto.getRequestModeration(),
                 eventFullDto.getState(),
                 eventFullDto.getTitle(),
                 eventFullDto.getViews());
@@ -45,16 +41,17 @@ public class EventMapper {
                 event.getConformedRequests(),
                 event.getCreatedOn(),
                 event.getDescription(),
-                event.getEventData(),
+                event.getEventDate(),
                 new UserShortDto(
                         event.getInitiator().getId(),
                         event.getInitiator().getName()),
                 new Location(
-                        event.getLap(),
+                        event.getLat(),
                         event.getLon()),
                 event.getPaid(),
                 event.getParticipantLimit(),
                 event.getPublishedOn(),
+                event.getRequestModeration(),
                 event.getState(),
                 event.getTitle(),
                 event.getViews());
@@ -70,11 +67,12 @@ public class EventMapper {
                 eventShortDto.getConformedRequests(),
                 null,
                 null,
-                eventShortDto.getEventData(),
+                eventShortDto.getEventDate(),
                 null,
                 null,
                 null,
                 eventShortDto.getPaid(),
+                null,
                 null,
                 null,
                 null,
@@ -90,7 +88,7 @@ public class EventMapper {
                         event.getCategories().getId(),
                         event.getCategories().getName()),
                 event.getConformedRequests(),
-                event.getEventData(),
+                event.getEventDate(),
                 new UserShortDto(
                         event.getInitiator().getId(),
                         event.getInitiator().getName()),
@@ -101,20 +99,21 @@ public class EventMapper {
 
     public static Event toEventNew(NewEventDto newEventDto) {
         return new Event(
-                null, // нет id
+                null,
                 newEventDto.getAnnotation(),
                 null,
                 null,
                 null,
                 newEventDto.getDescription(),
-                newEventDto.getEventData(),
+                newEventDto.getEventDate(),
                 null,
-                newEventDto.getLocation().getLap(),
+                newEventDto.getLocation().getLat(),
                 newEventDto.getLocation().getLon(),
                 newEventDto.getPaid(),
                 newEventDto.getParticipantLimit(),
-                newEventDto.getRequestModeration(),
                 null,
+                newEventDto.getRequestModeration(),
+                EventState.PENDING,
                 newEventDto.getTitle(),
                 null);
     }
@@ -124,25 +123,25 @@ public class EventMapper {
                 event.getAnnotation(),
                 event.getCategories().getId(),
                 event.getDescription(),
-                event.getEventData(),
+                event.getEventDate(),
                 new Location(
-                        event.getLap(),
+                        event.getLat(),
                         event.getLon()),
                 event.getPaid(),
                 event.getParticipantLimit(),
-                event.getPublishedOn(),
+                event.getRequestModeration(),
                 event.getTitle());
     }
 
     public static Event toEventUpdate(UpdateEventRequest updateEventRequest) {
         return new Event(
-                null,
+                updateEventRequest.getEventId(),
                 updateEventRequest.getAnnotation(),
                 null,
                 null,
                 null,
                 updateEventRequest.getDescription(),
-                updateEventRequest.getEventData(),
+                updateEventRequest.getEventDate(),
                 null,
                 null,
                 null,
@@ -150,65 +149,56 @@ public class EventMapper {
                 updateEventRequest.getParticipantLimit(),
                 null,
                 null,
+                null,
                 updateEventRequest.getTitle(),
                 null);
     }
 
-    public static UpdateEventRequest toEventUpdateDto (Event event) {
+    public static UpdateEventRequest toEventUpdateDto(Event event) {
         return new UpdateEventRequest(
                 event.getAnnotation(),
                 event.getCategories().getId(),
                 event.getDescription(),
-                event.getEventData(),
+                event.getEventDate(),
                 event.getId(),
                 event.getPaid(),
                 event.getParticipantLimit(),
                 event.getTitle());
     }
 
-    public static Event toEventAdmin (AdminUpdateEventRequest adminUpdateEventRequest) {
+    public static Event toEventAdmin(AdminUpdateEventRequest adminUpdateEventRequest) {
         return new Event(
                 null,
                 adminUpdateEventRequest.getAnnotation(),
-                new Categories(
-                        adminUpdateEventRequest.getCategory().getId(),
-                        adminUpdateEventRequest.getCategory().getName()),
+                null,
                 null,
                 null,
                 adminUpdateEventRequest.getDescription(),
-                adminUpdateEventRequest.getEventData(),
+                adminUpdateEventRequest.getEventDate(),
                 null,
-                adminUpdateEventRequest.getLocation().getLap(),
+                adminUpdateEventRequest.getLocation().getLat(),
                 adminUpdateEventRequest.getLocation().getLon(),
                 adminUpdateEventRequest.getPaid(),
                 adminUpdateEventRequest.getParticipantLimit(),
+                null,
                 adminUpdateEventRequest.getRequestModeration(),
                 null,
                 adminUpdateEventRequest.getTitle(),
                 null);
     }
 
-    public static AdminUpdateEventRequest toEventAdminDto (Event event) {
-        return new  AdminUpdateEventRequest(
+    public static AdminUpdateEventRequest toEventAdminDto(Event event) {
+        return new AdminUpdateEventRequest(
                 event.getAnnotation(),
-                new CategoriesDto(
-                        event.getCategories().getId(),
-                        event.getCategories().getName()),
+                null,
                 event.getDescription(),
-                event.getEventData(),
-                new Location(
-                        event.getLap(),
+                event.getEventDate(),
+                new LocationDto(
+                        event.getLat(),
                         event.getLon()),
                 event.getPaid(),
                 event.getParticipantLimit(),
-                event.getPublishedOn(),
+                event.getRequestModeration(),
                 event.getTitle());
     }
-
-    public static Event toEventParticipation (ParticipationRequestDto participationRequestDto) {
-        return new Event(
-
-        );
-    }
-
 }

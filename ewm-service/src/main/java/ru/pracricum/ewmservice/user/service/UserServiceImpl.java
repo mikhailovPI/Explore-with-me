@@ -3,7 +3,7 @@ package ru.pracricum.ewmservice.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.pracricum.ewmservice.PageRequestOverride;
+import ru.pracricum.ewmservice.util.PageRequestOverride;
 import ru.pracricum.ewmservice.exception.ConflictingRequestException;
 import ru.pracricum.ewmservice.exception.NotFoundException;
 import ru.pracricum.ewmservice.exception.ValidationException;
