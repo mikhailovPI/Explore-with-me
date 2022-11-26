@@ -13,5 +13,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByInitiator_IdOrderByEventDateDesc(Long id, PageRequestOverride page);
 
-
+    List<Event> findByIdIn(List<Long> ids);
 }

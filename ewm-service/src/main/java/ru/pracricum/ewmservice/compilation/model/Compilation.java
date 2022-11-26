@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "users", schema = "public")
+@Table(name = "compilation", schema = "public")
 public class Compilation {
 
     @Id
@@ -30,4 +30,10 @@ public class Compilation {
 
     @Column(name = "title")
     String title;
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinTable(name = "compilation_of_events",
+            joinColumns = @JoinColumn(name = "comp_id"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    private List<Event> events = new ArrayList<>();
 }

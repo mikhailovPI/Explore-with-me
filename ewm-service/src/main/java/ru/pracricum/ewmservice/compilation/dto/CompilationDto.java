@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import ru.pracricum.ewmservice.event.dto.EventShortDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,9 +18,9 @@ public class CompilationDto {
 
     Long id;
 
-    EventShortDto event;
+    String title;
 
     Boolean pinned;
 
-    String title;
+    List<EventShortDto> events = new ArrayList<>();;
 }

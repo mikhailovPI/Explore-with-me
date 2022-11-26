@@ -285,6 +285,10 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    public List<Event> getEventsByIds(List<Long> ids) {
+        return eventRepository.findByIdIn(ids);
+    }
+
     private void updateEvent(Event event,
                              Categories categories,
                              String annotation,
