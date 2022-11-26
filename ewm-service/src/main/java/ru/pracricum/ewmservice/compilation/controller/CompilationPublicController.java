@@ -19,7 +19,7 @@ public class CompilationPublicController {
 
     @GetMapping
     public List<CompilationDto> getCompilations (
-            @PathVariable Boolean pinned,
+            @RequestParam(name = "pinned", required = false) Boolean pinned,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "20") int size) {
         log.info("URL: /compilation. GetMapping/Получение подборки событий");

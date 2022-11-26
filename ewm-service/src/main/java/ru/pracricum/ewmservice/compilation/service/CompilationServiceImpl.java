@@ -16,6 +16,7 @@ import ru.pracricum.ewmservice.event.service.EventService;
 import ru.pracricum.ewmservice.exception.NotFoundException;
 import ru.pracricum.ewmservice.util.PageRequestOverride;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,18 +32,15 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
         PageRequestOverride pageRequest = PageRequestOverride.of(from, size);
-        if (pinned == null) {
-            return compilationRepository.findAll(pageRequest)
-                    .stream()
-                    .map(CompilationMapper::toCompilationDto)
-                    .collect(Collectors.toList());
-        } else {
-            return compilationRepository.findByPinnedOrderByPinnedAsc(pinned, pageRequest)
-                    .stream()
-                    .map(CompilationMapper::toCompilationDto)
-                    .collect(Collectors.toList());
+        List<Compilation> compilations = compilationRepository.findByPinned(pinned, pageRequest);
+        List<CompilationDto> compilationDtos = new ArrayList<>();
+        CompilationDto compilationDto;
+        for (Compilation compilation : compilations) {
+            compilationDto = CompilationMapper.toCompilationDto(compilation);
+            compilationDtos.add(compilationDto);
         }
-    }
+        return compilationDtos;
+        }
 
     @Override
     public CompilationDto getCompilationById(Long compId) {
@@ -50,12 +48,7 @@ public class CompilationServiceImpl implements CompilationService {
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Подборки %s не существует.", compId)));
 
-        List<EventShortDto> eventShortList = compilation.getEvents()
-                .stream()
-                .map(EventMapper::toEventShortDto)
-                .collect(Collectors.toList());
         CompilationDto compilationDto = CompilationMapper.toCompilationDto(compilation);
-        compilationDto.setEvents(eventShortList);
 
         return compilationDto;
     }
@@ -69,10 +62,8 @@ public class CompilationServiceImpl implements CompilationService {
         compilation.setEvents(eventList);
         Compilation compilationSave = compilationRepository.save(compilation);
 
-        List<EventShortDto> eventShortList = createEventShort(eventList);
-
-        CompilationDto compilationDtoSave = CompilationMapper.toCompilationDto(compilationSave);
-        compilationDtoSave.setEvents(eventShortList);
+        CompilationDto compilationDtoSave = CompilationMapper.toCompilationDto(compilationSave/*, eventList*/);
+        compilationDtoSave.setEvents(compilation.getEvents());
 
         return compilationDtoSave;
     }
@@ -96,6 +87,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void fixCompilationOnMainPage(Long compId) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException(
@@ -104,15 +96,16 @@ public class CompilationServiceImpl implements CompilationService {
             throw new NotFoundException(String.format("Подборка %s уже находится на главной странице", compId));
         }
         compilation.setPinned(true);
-        compilationRepository.save(compilation);
     }
 
     @Override
+    @Transactional
     public void deleteCompilationById(Long compId) {
         compilationRepository.deleteById(compId);
     }
 
     @Override
+    @Transactional
     public void deleteEventToCompilation(Long compId, Long eventId) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException(
@@ -124,12 +117,13 @@ public class CompilationServiceImpl implements CompilationService {
         if (!events.contains(event)) {
             throw new NotFoundException(String.format("Событие %s отсутствует в подборке %d.", eventId, compId));
         }
+
         events.remove(event);
-        compilation.setEvents(events);
         compilationRepository.save(compilation);
     }
 
     @Override
+    @Transactional
     public void deleteCompilationOnMainPage(Long compId) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException(
@@ -138,14 +132,5 @@ public class CompilationServiceImpl implements CompilationService {
             throw new NotFoundException(String.format("Подборка %s откреплена от главной страницы", compId));
         }
         compilation.setPinned(false);
-        compilationRepository.save(compilation);
-    }
-
-    private List<EventShortDto> createEventShort (List<Event> eventList) {
-        List<EventShortDto> eventShortDto = eventList
-                .stream()
-                .map(EventMapper::toEventShortDto)
-                .collect(Collectors.toList());
-        return eventShortDto;
     }
 }
