@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.pracricum.ewmservice.event.dto.EventShortDto;
 import ru.pracricum.ewmservice.event.model.Event;
 
 import javax.persistence.*;

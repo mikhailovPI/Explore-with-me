@@ -8,8 +8,6 @@ import ru.pracricum.ewmservice.compilation.dto.NewCompilationDto;
 import ru.pracricum.ewmservice.compilation.mapper.CompilationMapper;
 import ru.pracricum.ewmservice.compilation.model.Compilation;
 import ru.pracricum.ewmservice.compilation.repository.CompilationRepository;
-import ru.pracricum.ewmservice.event.dto.EventShortDto;
-import ru.pracricum.ewmservice.event.mapper.EventMapper;
 import ru.pracricum.ewmservice.event.model.Event;
 import ru.pracricum.ewmservice.event.repository.EventRepository;
 import ru.pracricum.ewmservice.event.service.EventService;
@@ -18,7 +16,6 @@ import ru.pracricum.ewmservice.util.PageRequestOverride;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,13 +30,13 @@ public class CompilationServiceImpl implements CompilationService {
     public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
         PageRequestOverride pageRequest = PageRequestOverride.of(from, size);
         List<Compilation> compilations = compilationRepository.findByPinned(pinned, pageRequest);
-        List<CompilationDto> compilationDtos = new ArrayList<>();
+        List<CompilationDto> compilationDtoList = new ArrayList<>();
         CompilationDto compilationDto;
         for (Compilation compilation : compilations) {
-            compilationDto = CompilationMapper.toCompilationDto(compilation);
-            compilationDtos.add(compilationDto);
+            compilationDto = CompilationMapper.toCompilationDto(compilation, compilation.getEvents());
+            compilationDtoList.add(compilationDto);
         }
-        return compilationDtos;
+        return compilationDtoList;
         }
 
     @Override
@@ -47,10 +44,7 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Подборки %s не существует.", compId)));
-
-        CompilationDto compilationDto = CompilationMapper.toCompilationDto(compilation);
-
-        return compilationDto;
+        return CompilationMapper.toCompilationDto(compilation, compilation.getEvents());
     }
 
     @Override
@@ -61,11 +55,7 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = CompilationMapper.toCompilationNew(compilationDto);
         compilation.setEvents(eventList);
         Compilation compilationSave = compilationRepository.save(compilation);
-
-        CompilationDto compilationDtoSave = CompilationMapper.toCompilationDto(compilationSave/*, eventList*/);
-        compilationDtoSave.setEvents(compilation.getEvents());
-
-        return compilationDtoSave;
+        return CompilationMapper.toCompilationDto(compilationSave, eventList);
     }
 
     @Override

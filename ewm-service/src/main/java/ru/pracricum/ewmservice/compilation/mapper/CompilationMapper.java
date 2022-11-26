@@ -7,19 +7,17 @@ import ru.pracricum.ewmservice.event.dto.EventShortDto;
 import ru.pracricum.ewmservice.event.mapper.EventMapper;
 import ru.pracricum.ewmservice.event.model.Event;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CompilationMapper {
 
-    public static CompilationDto toCompilationDto(Compilation compilation/*, List<Event> events*/) {
+    public static CompilationDto toCompilationDto(Compilation compilation, List<Event> events) {
         return new CompilationDto(
                 compilation.getId(),
                 compilation.getTitle(),
                 compilation.getPinned(),
-                compilation.getEvents());
-                /*createEventShort(events)*/
+                createEventShort(events));
     }
 
     public static Compilation toCompilationNew(NewCompilationDto newCompilationDto) {
@@ -31,10 +29,9 @@ public class CompilationMapper {
     }
 
     private static List<EventShortDto> createEventShort(List<Event> eventList) {
-        List<EventShortDto> eventShortDto = eventList
+        return eventList
                 .stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
-        return eventShortDto;
     }
 }

@@ -3,7 +3,6 @@ package ru.pracricum.ewmservice.compilation.service;
 import org.springframework.stereotype.Service;
 import ru.pracricum.ewmservice.compilation.dto.CompilationDto;
 import ru.pracricum.ewmservice.compilation.dto.NewCompilationDto;
-import ru.pracricum.ewmservice.compilation.model.Compilation;
 
 import java.util.List;
 
