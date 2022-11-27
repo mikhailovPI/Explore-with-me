@@ -14,14 +14,21 @@ import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.event.repository.EventRepository;
 import ru.pracricum.ewmservice.exception.NotFoundException;
 import ru.pracricum.ewmservice.requests.dto.ParticipationRequestDto;
+import ru.pracricum.ewmservice.requests.mapper.RequestMapper;
+import ru.pracricum.ewmservice.requests.model.Requests;
+import ru.pracricum.ewmservice.requests.repository.RequestsRepository;
 import ru.pracricum.ewmservice.user.dto.UserDto;
 import ru.pracricum.ewmservice.user.model.User;
 import ru.pracricum.ewmservice.user.repository.UserRepository;
 import ru.pracricum.ewmservice.util.PageRequestOverride;
 
+import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -32,19 +39,41 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoriesRepository categoriesRepository;
+    private final RequestsRepository requestsRepository;
 
     @Override
     public List<EventShortDto> getEvents(
             String text,
-            List<CategoriesDto> categories,
+            List<Long> categories,
             Boolean paid,
             LocalDateTime rangeStart,
             LocalDateTime rangeEnd,
             Boolean onlyAvailable,
             String sort,
             int from,
-            int size) {
-        return null;
+            int size) throws ValidationException {
+
+        rangeStart = (rangeStart != null) ? rangeStart : LocalDateTime.now();
+        rangeEnd = (rangeEnd != null) ? rangeEnd : LocalDateTime.now().plusYears(300);
+
+        if (rangeStart.isAfter(rangeEnd)) {
+            throw new ValidationException("Время окончания события не может быть раньше времени начала события");
+        }
+
+        List<Event> events;
+        if (categories != null) {
+            events = eventRepository.findByCategoryIdsAndText(text, categories);
+        } else {
+            events = eventRepository.findByText(text);
+        }
+
+        return events
+                .stream()
+                .map(EventMapper::toEventShortDto)
+                .sorted(Comparator.comparing(EventShortDto::getEventDate))
+                .skip(from)
+                .limit(size)
+                .collect(toList());
     }
 
     @Override
@@ -72,7 +101,7 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findByInitiator_IdOrderByEventDateDesc(userId, pageRequest)
                 .stream()
                 .map(EventMapper::toEventShortDto)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     @Override
@@ -89,7 +118,21 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<ParticipationRequestDto> getRequestsParticipationInEvent(Long userId, Long eventId) {
-        return null;
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Событие %s не существует.", eventId)));
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Пользователь %s не существует.", userId)));
+        if (!userId.equals(event.getInitiator().getId())) {
+            throw new NotFoundException(
+                    "Данный пользователь не может обновлять текущее событие");
+        }
+
+        return requestsRepository.findByEventId(eventId)
+                .stream()
+                .map(RequestMapper::toRequestDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -298,7 +341,7 @@ public class EventServiceImpl implements EventService {
                              Boolean paid,
                              Integer participantLimit,
                              String title) {
-        if (annotation !=null) {
+        if (annotation != null) {
             event.setAnnotation(annotation);
         }
         if (category != null) {

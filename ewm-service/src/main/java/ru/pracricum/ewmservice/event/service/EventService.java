@@ -8,6 +8,7 @@ import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.requests.dto.ParticipationRequestDto;
 import ru.pracricum.ewmservice.user.dto.UserDto;
 
+import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,14 +16,14 @@ import java.util.List;
 public interface EventService {
     List<EventShortDto> getEvents(
             String text,
-            List<CategoriesDto> categories,
+            List<Long> categories,
             Boolean paid,
             LocalDateTime rangeStart,
             LocalDateTime rangeEnd,
             Boolean onlyAvailable,
             String sort,
             int from,
-            int size);
+            int size) throws ValidationException;
 
     EventFullDto getEventById(Long eventId);
 
@@ -42,7 +43,14 @@ public interface EventService {
 
     ParticipationRequestDto rejectRequestsParticipationForEvent(Long userId, Long eventId, Long reqId);
 
-    List<EventFullDto> searchEvents(List<UserDto> usersId, List<EventState> eventStates, List<CategoriesDto> categories, LocalDateTime startSearch, LocalDateTime endSearch, int from, int size);
+    List<EventFullDto> searchEvents(
+            List<UserDto> usersId,
+            List<EventState> eventStates,
+            List<CategoriesDto> categories,
+            LocalDateTime startSearch,
+            LocalDateTime endSearch,
+            int from,
+            int size);
 
     EventFullDto putEvent(Long eventId, AdminUpdateEventRequest adminUpdateEventRequest);
 

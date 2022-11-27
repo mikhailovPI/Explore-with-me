@@ -3,6 +3,7 @@ package ru.pracricum.ewmservice.user.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.pracricum.ewmservice.user.dto.NewUserRequest;
 import ru.pracricum.ewmservice.user.dto.UserDto;
 import ru.pracricum.ewmservice.user.service.UserService;
 
@@ -26,7 +27,7 @@ public class UserAdminController {
     }
 
     @PostMapping
-    public UserDto createUser(@RequestBody UserDto userDto) {
+    public UserDto createUser(@RequestBody NewUserRequest userDto) {
         log.info("URL: /users. PostMapping/Создание пользователя");
         return userService.createUser(userDto);
     }

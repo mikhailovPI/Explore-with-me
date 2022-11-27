@@ -28,7 +28,7 @@ public class EventFullDto {
 
     CategoriesDto category;
 
-    Integer conformedRequests;
+    Integer confirmedRequests;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

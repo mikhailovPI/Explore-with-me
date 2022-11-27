@@ -3,6 +3,7 @@ package ru.pracricum.ewmservice.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.pracricum.ewmservice.user.dto.NewUserRequest;
 import ru.pracricum.ewmservice.util.PageRequestOverride;
 import ru.pracricum.ewmservice.exception.ConflictingRequestException;
 import ru.pracricum.ewmservice.exception.NotFoundException;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto createUser(UserDto userDto) {
+    public UserDto createUser(NewUserRequest userDto) {
         if (userDto.getEmail() == null) {
             throw new ValidationException("E-mail не должен быть пустым.");
         }
@@ -54,8 +55,7 @@ public class UserServiceImpl implements UserService {
                     throw new ConflictingRequestException(
                             String.format("Пользователь с именем %s - уже существует", name));
                 });
-        User user = UserMapper.toUser(userDto);
-        User userSave = userRepository.save(user);
+        User userSave = userRepository.save(UserMapper.toUserNew(userDto));
         return UserMapper.toUserDto(userSave);
     }
 

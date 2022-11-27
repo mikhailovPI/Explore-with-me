@@ -39,6 +39,7 @@ public class Requests {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime created;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "state")
     ParticipationStatus status;
 }

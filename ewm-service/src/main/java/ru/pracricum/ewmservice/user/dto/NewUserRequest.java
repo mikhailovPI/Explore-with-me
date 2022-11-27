@@ -1,4 +1,4 @@
-package ru.pracricum.ewmservice.requests.dto;
+package ru.pracricum.ewmservice.user.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -8,7 +8,9 @@ import ru.pracricum.ewmservice.event.dto.EventFullDto;
 import ru.pracricum.ewmservice.event.dto.EventShortDto;
 import ru.pracricum.ewmservice.event.service.EventService;
 
+import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -18,25 +20,28 @@ import java.util.List;
 public class EventPublicController {
 
     private final EventService eventService;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping
     public List<EventShortDto> getEvents(
-            @PathVariable String text,
-            @RequestParam List<CategoriesDto> categories,
-            @PathVariable Boolean paid,
-            @PathVariable LocalDateTime rangeStart,
-            @PathVariable LocalDateTime rangeEnd,
-            @PathVariable Boolean onlyAvailable,
-            @PathVariable String sort,
+            @RequestParam(name = "text", required = false) String text,
+            @RequestParam(name = "categories", required = false) List<Long> categories,
+            @RequestParam(name = "paid", required = false) Boolean paid,
+            @RequestParam(name = "rangeStart",
+                    defaultValue = "1980-01-01 13:30:38") String rangeStart,
+            @RequestParam(name = "rangeEnd",
+                    defaultValue = "2050-01-01 00:00:00") String rangeEnd,
+            @RequestParam(required = false) Boolean onlyAvailable,
+            @RequestParam(required = false) String sort,
             @RequestParam(name = "from", defaultValue = "0") int from,
-            @RequestParam(name = "size", defaultValue = "20") int size) {
+            @RequestParam(name = "size", defaultValue = "20") int size) throws ValidationException {
         log.info("URL: /events. PostMapping/Получение списка событий с фильтрами: " );
         return eventService.getEvents(
                 text,
                 categories,
                 paid,
-                rangeStart,
-                rangeEnd,
+                LocalDateTime.parse(rangeStart, formatter),
+                LocalDateTime.parse(rangeEnd, formatter),
                 onlyAvailable,
                 sort,
                 from,

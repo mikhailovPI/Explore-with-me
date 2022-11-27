@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import ru.pracricum.ewmservice.event.dto.EventShortDto;
 import ru.pracricum.ewmservice.event.model.EventState;
+import ru.pracricum.ewmservice.requests.model.ParticipationStatus;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -16,12 +19,12 @@ public class ParticipationRequestDto {
 
     Long id;
 
-    String created;
+    LocalDateTime created;
 
-    EventShortDto event;
+    Long event;
 
     Long requester;
 
-    EventState state;
+    ParticipationStatus state;
 
 }

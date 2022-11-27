@@ -42,7 +42,7 @@ public class EventPrivateController {
             @PathVariable Long userId,
             @PathVariable Long eventId) {
         log.info("URL: /users/{userId}/events/{eventId}/requests. " +
-                "GetMapping/Получение информации о запросах события " + eventId);
+                "GetMapping/Получение информации о запросах на участие в событии " + eventId);
         return eventService.getRequestsParticipationInEvent(userId, eventId);
     }
 

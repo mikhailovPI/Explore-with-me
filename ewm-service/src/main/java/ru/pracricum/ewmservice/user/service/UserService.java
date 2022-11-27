@@ -1,6 +1,7 @@
 package ru.pracricum.ewmservice.user.service;
 
 import org.springframework.stereotype.Service;
+import ru.pracricum.ewmservice.user.dto.NewUserRequest;
 import ru.pracricum.ewmservice.user.dto.UserDto;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public interface UserService {
     List<UserDto> getUsersList(List<Long> ids, int from, int size);
 
-    UserDto createUser(UserDto userDto);
+    UserDto createUser(NewUserRequest userDto);
 
     void deleteUserById(Long userId);
 }

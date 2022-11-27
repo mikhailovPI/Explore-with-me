@@ -15,7 +15,7 @@ public class EventMapper {
                 eventFullDto.getId(),
                 eventFullDto.getAnnotation(),
                 null,
-                eventFullDto.getConformedRequests(),
+                eventFullDto.getConfirmedRequests(),
                 eventFullDto.getCreatedOn(),
                 eventFullDto.getDescription(),
                 eventFullDto.getEventDate(),
@@ -64,7 +64,7 @@ public class EventMapper {
                 new Categories(
                         eventShortDto.getCategory().getId(),
                         eventShortDto.getCategory().getName()),
-                eventShortDto.getConformedRequests(),
+                eventShortDto.getConfirmedRequests(),
                 null,
                 null,
                 eventShortDto.getEventDate(),
