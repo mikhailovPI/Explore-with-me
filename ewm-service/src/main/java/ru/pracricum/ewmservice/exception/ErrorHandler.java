@@ -49,5 +49,4 @@ public class ErrorHandler {
                 e.getMessage(),
                 ErrorStatusEwm.CONFLICT);
     }
-
 }

@@ -1,6 +1,5 @@
 package ru.pracricum.ewmservice.requests.controller;
 
-import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +23,7 @@ public class RequestPrivateController {
     @GetMapping
     public List<ParticipationRequestDto> getInformationRequest(@PathVariable Long userId) {
         log.info("URL: /users/{userId}/requests. GetMapping/Получение информации о заявках текуущего пользователя " +
-                "на участие в событии");
+                "на участие в событии/getInformationRequest");
         return requestsService.getInformationRequest(userId);
     }
 
@@ -32,9 +31,9 @@ public class RequestPrivateController {
     public ParticipationRequestDto createRequest(
             @PathVariable Long userId,
             @RequestParam(name = "eventId", required = false) Long eventId) {
-        log.info("URL: /users/{userId}/requests. PostMapping/Получение всех пользователей");
+        log.info("URL: /users/{userId}/requests. PostMapping/Получение всех пользователей/createRequest");
         if (eventId == null) {
-            throw new NotFoundException("dfsd");
+            throw new NotFoundException("Передан пустой идентификатор события");
         }
         return requestsService.createRequest(userId, eventId);
     }
@@ -43,7 +42,8 @@ public class RequestPrivateController {
     public ParticipationRequestDto cancelRequest(
             @PathVariable Long userId,
             @PathVariable Long requestId) throws ValidationException {
-        log.info("URL: /users/{userId}/requests/{requestId}/cancel. PatchMapping/Отмена запроса на участие");
+        log.info("URL: /users/{userId}/requests/{requestId}/cancel. " +
+                "PatchMapping/Отмена запроса на участие/cancelRequest");
         return requestsService.cancelRequest(userId, requestId);
     }
 }

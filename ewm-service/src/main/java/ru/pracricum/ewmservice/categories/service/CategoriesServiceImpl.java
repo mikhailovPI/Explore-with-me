@@ -3,14 +3,14 @@ package ru.pracricum.ewmservice.categories.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.pracricum.ewmservice.exception.NotExistObjectException;
-import ru.pracricum.ewmservice.exception.NotFoundException;
-import ru.pracricum.ewmservice.util.PageRequestOverride;
 import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
 import ru.pracricum.ewmservice.categories.mapper.CategoriesMapper;
 import ru.pracricum.ewmservice.categories.model.Categories;
 import ru.pracricum.ewmservice.categories.repository.CategoriesRepository;
 import ru.pracricum.ewmservice.exception.ConflictingRequestException;
+import ru.pracricum.ewmservice.exception.NotExistObjectException;
+import ru.pracricum.ewmservice.exception.NotFoundException;
+import ru.pracricum.ewmservice.util.PageRequestOverride;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,18 +33,14 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     public CategoriesDto getCategoryById(Long catId) {
-        Categories categories = categoriesRepository.findById(catId)
-                .orElseThrow(() -> new NotExistObjectException(
-                        String.format("Категория %s не существует.", catId)));
+        Categories categories = validationCategories(catId);
         return CategoriesMapper.toCategoryDto(categories);
     }
 
     @Override
     @Transactional
     public CategoriesDto createCategory(CategoriesDto categoriesDto) {
-        if (categoriesDto.getName() == null) {
-            throw new NotFoundException("Название категории не может быть пустым");
-        }
+        validationBodyCategories(categoriesDto);
         categoriesRepository.findByNameOrderByName()
                 .stream()
                 .filter(name -> name.equals(categoriesDto.getName())).forEachOrdered(name -> {
@@ -59,9 +55,7 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     @Transactional
     public CategoriesDto patchCategory(CategoriesDto categoriesDto) {
-        if (categoriesDto.getName() == null) {
-            throw new NotFoundException("Название категории не может быть пустым");
-        }
+        validationBodyCategories(categoriesDto);
         categoriesRepository.findByNameOrderByName()
                 .stream()
                 .filter(name -> name.equals(categoriesDto.getName())).forEachOrdered(name -> {
@@ -69,19 +63,27 @@ public class CategoriesServiceImpl implements CategoriesService {
                             String.format("Категрия с названием %s - уже существует", name));
                 });
         Categories categories = CategoriesMapper.toCategory(categoriesDto);
-        Categories categoriesUpdate = categoriesRepository.findById(categories.getId())
-                .orElseThrow(() -> new NotExistObjectException(
-                        String.format("Категория %s не существует.", categoriesDto.getId())));
+        Categories categoriesUpdate = validationCategories(categories.getId());
         categoriesUpdate.setName(categories.getName());
+
         return CategoriesMapper.toCategoryDto(categoriesUpdate);
     }
 
     @Override
     @Transactional
     public void deleteCategoryById(Long catId) {
-        categoriesRepository.findById(catId)
+        categoriesRepository.deleteById(catId);
+    }
+
+    private Categories validationCategories(Long catId) {
+        return categoriesRepository.findById(catId)
                 .orElseThrow(() -> new NotExistObjectException(
                         String.format("Категория %s не существует.", catId)));
-        categoriesRepository.deleteById(catId);
+    }
+
+    private void validationBodyCategories(CategoriesDto categoriesDto) {
+        if (categoriesDto.getName() == null) {
+            throw new NotFoundException("Название категории не может быть пустым");
+        }
     }
 }

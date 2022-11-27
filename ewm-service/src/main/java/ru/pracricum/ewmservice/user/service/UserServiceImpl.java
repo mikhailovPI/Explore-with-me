@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.pracricum.ewmservice.user.dto.NewUserRequest;
 import ru.pracricum.ewmservice.util.PageRequestOverride;
 import ru.pracricum.ewmservice.exception.ConflictingRequestException;
-import ru.pracricum.ewmservice.exception.NotFoundException;
 import ru.pracricum.ewmservice.exception.ValidationException;
 import ru.pracricum.ewmservice.user.dto.UserDto;
 import ru.pracricum.ewmservice.user.mapper.UserMapper;
@@ -42,15 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto createUser(NewUserRequest userDto) {
-        if (userDto.getEmail() == null) {
-            throw new ValidationException("E-mail не должен быть пустым.");
-        }
-        if (!userDto.getEmail().contains("@")) {
-            throw new ValidationException("Введен некорректный e-mail.");
-        }
-        if (userDto.getName() == null) {
-            throw new ValidationException("Name не должен быть пустым.");
-        }
+        validationBodyUser(userDto);
         userRepository.findByNameOrderByName()
                 .stream()
                 .filter(name -> name.equals(userDto.getName()))
@@ -65,9 +56,18 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUserById(Long userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Пользователь %s не существует.", userId)));
         userRepository.deleteById(userId);
+    }
+
+    private static void validationBodyUser(NewUserRequest userDto) {
+        if (userDto.getEmail() == null) {
+            throw new ValidationException("E-mail не должен быть пустым.");
+        }
+        if (!userDto.getEmail().contains("@")) {
+            throw new ValidationException("Введен некорректный e-mail.");
+        }
+        if (userDto.getName() == null) {
+            throw new ValidationException("Name не должен быть пустым.");
+        }
     }
 }

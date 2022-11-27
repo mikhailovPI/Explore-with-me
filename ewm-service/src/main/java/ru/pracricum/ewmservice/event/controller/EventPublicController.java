@@ -3,7 +3,6 @@ package ru.pracricum.ewmservice.event.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
 import ru.pracricum.ewmservice.event.dto.EventFullDto;
 import ru.pracricum.ewmservice.event.dto.EventShortDto;
 import ru.pracricum.ewmservice.event.service.EventService;
@@ -34,8 +33,8 @@ public class EventPublicController {
             @RequestParam(required = false) Boolean onlyAvailable,
             @RequestParam(required = false) String sort,
             @RequestParam(name = "from", defaultValue = "0") int from,
-            @RequestParam(name = "size", defaultValue = "20") int size) throws ValidationException {
-        log.info("URL: /events. PostMapping/Получение списка событий с фильтрами: " );
+            @RequestParam(name = "size", defaultValue = "10") int size) throws ValidationException {
+        log.info("URL: /events. PostMapping/Получение списка событий с фильтрами/getEvents");
         return eventService.getEvents(
                 text,
                 categories,
@@ -51,7 +50,7 @@ public class EventPublicController {
     @GetMapping(path = "/{eventId}")
     public EventFullDto getEventById(
             @PathVariable Long eventId) {
-        log.info("URL: /event/{eventId}. GetMapping/Получение события " +eventId);
+        log.info("URL: /event/{eventId}. GetMapping/Получение события " + eventId + "/getEventById");
         return eventService.getEventById(eventId);
     }
 }

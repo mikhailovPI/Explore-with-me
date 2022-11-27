@@ -23,5 +23,4 @@ public class Categories {
 
     @Column(name = "category_name")
     String name;
-
 }

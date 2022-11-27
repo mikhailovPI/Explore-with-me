@@ -17,18 +17,19 @@ public class CompilationPublicController {
     private final CompilationService compilationService;
 
     @GetMapping
-    public List<CompilationDto> getCompilations (
+    public List<CompilationDto> getCompilations(
             @RequestParam(name = "pinned", required = false) Boolean pinned,
             @RequestParam(name = "from", defaultValue = "0") int from,
-            @RequestParam(name = "size", defaultValue = "20") int size) {
-        log.info("URL: /compilation. GetMapping/Получение подборки событий");
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        log.info("URL: /compilation. GetMapping/Получение подборки событий/getCompilations");
         return compilationService.getCompilations(pinned, from, size);
     }
 
     @GetMapping(path = "/{compId}")
-    public CompilationDto getCompilationById (
+    public CompilationDto getCompilationById(
             @PathVariable Long compId) {
-        log.info("URL: /compilation/{compId}. GetMapping/Получение подборки событий по id " + compId);
+        log.info("URL: /compilation/{compId}. GetMapping/Получение подборки событий по id " + compId
+                + "getCompilationById");
         return compilationService.getCompilationById(compId);
     }
 }

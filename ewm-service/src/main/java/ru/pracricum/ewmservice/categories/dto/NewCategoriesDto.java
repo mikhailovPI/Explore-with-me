@@ -14,5 +14,4 @@ import lombok.experimental.FieldDefaults;
 public class NewCategoriesDto {
 
     String name;
-
 }

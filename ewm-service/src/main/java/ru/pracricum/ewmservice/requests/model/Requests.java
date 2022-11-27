@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.pracricum.ewmservice.event.model.Event;
-import ru.pracricum.ewmservice.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,13 +24,9 @@ public class Requests {
     @Column(name = "request_id")
     Long id;
 
-    //@ManyToOne
-    //@JoinColumn(name = "event_id")
     @Column(name = "event_id")
     Long event;
 
-    //@ManyToOne
-    //@JoinColumn(name = "user_id")
     @Column(name = "user_id")
     Long requester;
 

@@ -1,7 +1,6 @@
 package ru.pracricum.ewmservice.categories.mapper;
 
 import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
-import ru.pracricum.ewmservice.categories.dto.NewCategoriesDto;
 import ru.pracricum.ewmservice.categories.model.Categories;
 
 public class CategoriesMapper {
@@ -16,16 +15,5 @@ public class CategoriesMapper {
         return new CategoriesDto(
                 categories.getId(),
                 categories.getName());
-    }
-
-    public static NewCategoriesDto toNewCategoryDto (Categories categories) {
-        return new NewCategoriesDto(
-          categories.getName());
-    }
-
-    public static Categories toNewCategory (NewCategoriesDto newCategoriesDto) {
-        return new Categories(
-                null,
-                newCategoriesDto.getName());
     }
 }

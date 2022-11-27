@@ -26,20 +26,21 @@ public class CompilationAdminController {
             @PathVariable Long compId,
             @PathVariable Long eventId) {
         log.info("URL: /admin/compilations/{compId}/events/{eventId}. PatchMapping/Добавление события " + eventId
-                + " в  подборку " + compId);
+                + " в  подборку " + compId + "/addEventToCompilation");
         compilationService.addEventToCompilation(compId, eventId);
     }
 
     @PatchMapping(path = "/{compId}/pin")
     public void fixCompilationOnMainPage(@PathVariable Long compId) {
         log.info("URL: /admin/compilations/{compId}/events/{eventId}. PatchMapping/Закрепить подборку " + compId
-                + " на главной странице");
+                + " на главной странице/fixCompilationOnMainPage");
         compilationService.fixCompilationOnMainPage(compId);
     }
 
     @DeleteMapping(path = "/{compId}")
     public void deleteCompilationById(@PathVariable Long compId) {
-        log.info("URL: /admin/compilations/{compId}/events/{eventId}. DeleteMapping/Удаление подборки " + compId);
+        log.info("URL: /admin/compilations/{compId}/events/{eventId}. DeleteMapping/Удаление подборки " + compId +
+                "/deleteCompilationById");
         compilationService.deleteCompilationById(compId);
     }
 
@@ -48,14 +49,14 @@ public class CompilationAdminController {
             @PathVariable Long compId,
             @PathVariable Long eventId) {
         log.info("URL: /admin/compilations/{compId}/events/{eventId}. DeleteMapping/Удаление события " + eventId
-                + " в  подборку " + compId);
+                + " из подборки " + compId + "/deleteEventToCompilation");
         compilationService.deleteEventToCompilation(compId, eventId);
     }
 
     @DeleteMapping(path = "/{compId}/pin")
     public void deleteCompilationOnMainPage(@PathVariable Long compId) {
         log.info("URL: /admin/compilations/{compId}/events/{eventId}. DeleteMapping/Открепить подборку " + compId
-                + " на главной странице");
+                + " с главной страницы/deleteCompilationOnMainPage");
         compilationService.deleteCompilationOnMainPage(compId);
     }
 }

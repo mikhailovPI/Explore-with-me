@@ -1,6 +1,5 @@
 package ru.pracricum.ewmservice.categories.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -16,20 +15,20 @@ public class CategoriesAdminController {
     private final CategoriesService categoriesService;
 
     @PostMapping
-    public CategoriesDto createCategory (@RequestBody CategoriesDto categoriesDto) {
-        log.info("URL: /admin/categories. PostMapping/Создание категории");
+    public CategoriesDto createCategory(@RequestBody CategoriesDto categoriesDto) {
+        log.info("URL: /admin/categories. PostMapping/Создание категории/createCategory");
         return categoriesService.createCategory(categoriesDto);
     }
 
     @PatchMapping
-    public CategoriesDto patchCategory (@RequestBody CategoriesDto categoriesDto) {
-        log.info("URL: /admin/categories. PatchMapping/Изменение категории");
+    public CategoriesDto patchCategory(@RequestBody CategoriesDto categoriesDto) {
+        log.info("URL: /admin/categories. PatchMapping/Изменение категории/patchCategory");
         return categoriesService.patchCategory(categoriesDto);
     }
 
     @DeleteMapping(path = "/{catId}")
-    public void deleteCategory (@PathVariable Long catId) {
-        log.info("URL: /admin/categories/{catId}. DeleteMapping/Удаление категории");
+    public void deleteCategory(@PathVariable Long catId) {
+        log.info("URL: /admin/categories/{catId}. DeleteMapping/Удаление категории/deleteCategory");
         categoriesService.deleteCategoryById(catId);
     }
 }

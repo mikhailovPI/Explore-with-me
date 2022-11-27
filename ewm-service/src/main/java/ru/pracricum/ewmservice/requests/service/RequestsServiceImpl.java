@@ -12,6 +12,7 @@ import ru.pracricum.ewmservice.requests.mapper.RequestMapper;
 import ru.pracricum.ewmservice.requests.model.ParticipationStatus;
 import ru.pracricum.ewmservice.requests.model.Requests;
 import ru.pracricum.ewmservice.requests.repository.RequestsRepository;
+import ru.pracricum.ewmservice.user.model.User;
 import ru.pracricum.ewmservice.user.repository.UserRepository;
 
 import javax.xml.bind.ValidationException;
@@ -24,31 +25,24 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class RequestsServiceImpl implements RequestsService {
 
-    private final RequestsRepository requestRepository;
+    private final RequestsRepository requestsRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
     @Override
     public List<ParticipationRequestDto> getInformationRequest(Long userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Пользователь %s не существует.", userId)));
-        List<ParticipationRequestDto> requestDtoList = requestRepository.findByRequester(userId)
+        User user = validationUser(userId);
+        return requestsRepository.findByRequester(userId)
                 .stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
-        return requestDtoList;
     }
 
     @Override
     @Transactional
     public ParticipationRequestDto createRequest(Long userId, Long eventId) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Событие %s не существует.", eventId)));
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Пользователь %s не существует.", userId)));
+        Event event = validationEvent(eventId);
+        validationUser(userId);
         if (!event.getRequestModeration()) {
             if (event.getInitiator().getId().equals(userId)) {
                 throw new NotFoundException("Организатор не может быть участником события");
@@ -68,7 +62,7 @@ public class RequestsServiceImpl implements RequestsService {
         requestDto.setStatus(ParticipationStatus.PENDING);
 
         Requests request = RequestMapper.toRequest(requestDto);
-        Requests requestsSave = requestRepository.save(request);
+        Requests requestsSave = requestsRepository.save(request);
 
         return RequestMapper.toRequestDto(requestsSave);
     }
@@ -76,15 +70,30 @@ public class RequestsServiceImpl implements RequestsService {
     @Override
     @Transactional
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) throws ValidationException {
-        Requests request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new NotFoundException("Request for participation in the event with id = "
-                        + requestId + " not found"));
+        Requests requests = validationRequests(requestId);
 
-        if (!userId.equals(request.getRequester())) {
-            throw new ValidationException("Only the user who created the request can cancel it");
+        if (!userId.equals(requests.getRequester())) {
+            throw new ValidationException("Отменить запрос может пользователь, создавший его");
         }
-        request.setStatus(ParticipationStatus.CANCELED);
-        ParticipationRequestDto dto = RequestMapper.toRequestDto(requestRepository.save(request));
-        return dto;
+        requests.setStatus(ParticipationStatus.CANCELED);
+        return RequestMapper.toRequestDto(requestsRepository.save(requests));
+    }
+
+    private Requests validationRequests(Long requestId) {
+        return requestsRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Запрос на участие %s не существует.", requestId)));
+    }
+
+    private User validationUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Пользователь %s не существует.", userId)));
+    }
+
+    private Event validationEvent(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Событие %s не существует.", eventId)));
     }
 }

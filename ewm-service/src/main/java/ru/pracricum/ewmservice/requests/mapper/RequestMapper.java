@@ -1,11 +1,11 @@
 package ru.pracricum.ewmservice.requests.mapper;
 
-import ru.pracricum.ewmservice.requests.dto.*;
+import ru.pracricum.ewmservice.requests.dto.ParticipationRequestDto;
 import ru.pracricum.ewmservice.requests.model.Requests;
 
 public class RequestMapper {
 
-    public static Requests toRequest (ParticipationRequestDto participationRequestDto) {
+    public static Requests toRequest(ParticipationRequestDto participationRequestDto) {
         return new Requests(
                 participationRequestDto.getId(),
                 participationRequestDto.getEvent(),
@@ -14,7 +14,7 @@ public class RequestMapper {
                 participationRequestDto.getStatus());
     }
 
-    public static ParticipationRequestDto toRequestDto (Requests requests) {
+    public static ParticipationRequestDto toRequestDto(Requests requests) {
         return new ParticipationRequestDto(
                 requests.getId(),
                 requests.getCreated(),

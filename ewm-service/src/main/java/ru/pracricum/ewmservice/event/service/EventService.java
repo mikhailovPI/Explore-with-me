@@ -1,12 +1,10 @@
 package ru.pracricum.ewmservice.event.service;
 
 import org.springframework.stereotype.Service;
-import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
 import ru.pracricum.ewmservice.event.dto.*;
 import ru.pracricum.ewmservice.event.model.Event;
 import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.requests.dto.ParticipationRequestDto;
-import ru.pracricum.ewmservice.user.dto.UserDto;
 
 import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;

@@ -12,5 +12,4 @@ public class ErrorResponse {
     String error;
     String message;
     ErrorStatusEwm status;
-
 }

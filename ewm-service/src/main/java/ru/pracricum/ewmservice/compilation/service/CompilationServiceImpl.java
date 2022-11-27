@@ -37,22 +37,18 @@ public class CompilationServiceImpl implements CompilationService {
             compilationDtoList.add(compilationDto);
         }
         return compilationDtoList;
-        }
+    }
 
     @Override
     public CompilationDto getCompilationById(Long compId) {
-        Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Подборки %s не существует.", compId)));
+        Compilation compilation = validationCompilation(compId);
         return CompilationMapper.toCompilationDto(compilation, compilation.getEvents());
     }
 
     @Override
     @Transactional
     public CompilationDto createCompilation(NewCompilationDto compilationDto) {
-        if (compilationDto.getTitle() == null) {
-            throw new NotFoundException("Описание подсборки не может быть пустым");
-        }
+        validationBodyCompilation(compilationDto);
 
         List<Event> eventList = eventService.getEventsByIds(compilationDto.getEvents());
 
@@ -65,12 +61,8 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void addEventToCompilation(Long compId, Long eventId) {
-        Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Подборки %s не существует.", compId)));
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Событие %s не существует.", eventId)));
+        Compilation compilation = validationCompilation(compId);
+        Event event = validationEvent(eventId);
         List<Event> events = compilation.getEvents();
         if (events.contains(event)) {
             throw new NotFoundException(String.format("Событие %s уже находится в подборке %d.", eventId, compId));
@@ -83,9 +75,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void fixCompilationOnMainPage(Long compId) {
-        Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Подборки %s не существует.", compId)));
+        Compilation compilation = validationCompilation(compId);
         if (compilation.getPinned()) {
             throw new NotFoundException(String.format("Подборка %s уже находится на главной странице", compId));
         }
@@ -101,12 +91,8 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public void deleteEventToCompilation(Long compId, Long eventId) {
-        Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Подборки %s не существует.", compId)));
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Событие %s не существует.", eventId)));
+        Compilation compilation = validationCompilation(compId);
+        Event event = validationEvent(eventId);
         List<Event> events = compilation.getEvents();
         if (!events.contains(event)) {
             throw new NotFoundException(String.format("Событие %s отсутствует в подборке %d.", eventId, compId));
@@ -116,15 +102,32 @@ public class CompilationServiceImpl implements CompilationService {
         compilationRepository.save(compilation);
     }
 
+
     @Override
     @Transactional
     public void deleteCompilationOnMainPage(Long compId) {
-        Compilation compilation = compilationRepository.findById(compId)
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Подборки %s не существует.", compId)));
+        Compilation compilation = validationCompilation(compId);
         if (!compilation.getPinned()) {
             throw new NotFoundException(String.format("Подборка %s откреплена от главной страницы", compId));
         }
         compilation.setPinned(false);
+    }
+
+    private Compilation validationCompilation(Long compId) {
+        return compilationRepository.findById(compId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Подборки %s не существует.", compId)));
+    }
+
+    private Event validationEvent(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Событие %s не существует.", eventId)));
+    }
+
+    private void validationBodyCompilation(NewCompilationDto compilationDto) {
+        if (compilationDto.getTitle() == null) {
+            throw new NotFoundException("Описание подсборки не может быть пустым");
+        }
     }
 }

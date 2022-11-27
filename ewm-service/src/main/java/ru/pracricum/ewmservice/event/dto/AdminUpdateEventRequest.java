@@ -7,9 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
-import ru.pracricum.ewmservice.categories.model.Categories;
-import ru.pracricum.ewmservice.event.model.Location;
 
 import java.time.LocalDateTime;
 
