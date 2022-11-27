@@ -8,17 +8,17 @@ public class RequestMapper {
     public static Requests toRequest (ParticipationRequestDto participationRequestDto) {
         return new Requests(
                 participationRequestDto.getId(),
-                null,
-                null,
+                participationRequestDto.getEvent(),
+                participationRequestDto.getRequester(),
                 participationRequestDto.getCreated(),
-                participationRequestDto.getState());
+                participationRequestDto.getStatus());
     }
 
     public static ParticipationRequestDto toRequestDto (Requests requests) {
         return new ParticipationRequestDto(
                 requests.getId(),
                 requests.getCreated(),
-                requests.getEvent().getId(),
+                requests.getEvent(),
                 requests.getId(),
                 requests.getStatus());
     }

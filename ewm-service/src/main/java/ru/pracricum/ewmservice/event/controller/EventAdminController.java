@@ -23,11 +23,11 @@ public class EventAdminController {
 
     @GetMapping
     public List<EventFullDto> searchEvents(
-            @RequestParam List<UserDto> usersId,
-            @RequestParam List<EventState> eventStates,
-            @RequestParam List<CategoriesDto> categories,
-            @PathVariable LocalDateTime rangeStart,
-            @PathVariable LocalDateTime rangeEnd,
+            @RequestParam(name = "users", required = false) List<Long> usersId,
+            @RequestParam(name = "states", required = false) List<EventState> eventStates,
+            @RequestParam(name = "categories", required = false) List<Long> categories,
+            @PathVariable(name = "rangeStart", required = false) String rangeStart,
+            @PathVariable(name = "rangeEnd", required = false) String rangeEnd,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "20") int size) {
         log.info("URL: /admin/events. GetMapping/Поиск события по параметрам: " );

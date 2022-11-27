@@ -44,11 +44,11 @@ public interface EventService {
     ParticipationRequestDto rejectRequestsParticipationForEvent(Long userId, Long eventId, Long reqId);
 
     List<EventFullDto> searchEvents(
-            List<UserDto> usersId,
+            List<Long> usersId,
             List<EventState> eventStates,
-            List<CategoriesDto> categories,
-            LocalDateTime startSearch,
-            LocalDateTime endSearch,
+            List<Long> categories,
+            String rangeStart,
+            String  rangeEnd,
             int from,
             int size);
 

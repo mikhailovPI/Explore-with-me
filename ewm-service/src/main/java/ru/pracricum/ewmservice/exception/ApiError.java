@@ -1,4 +1,4 @@
-package ru.pracricum.ewmservice.exception.dto;
+package ru.pracricum.ewmservice.exception;
 
 
 import lombok.AccessLevel;

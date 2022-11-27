@@ -1,6 +1,8 @@
 package ru.pracricum.ewmservice.event.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -11,10 +13,12 @@ import ru.pracricum.ewmservice.event.dto.*;
 import ru.pracricum.ewmservice.event.mapper.EventMapper;
 import ru.pracricum.ewmservice.event.model.Event;
 import ru.pracricum.ewmservice.event.model.EventState;
+import ru.pracricum.ewmservice.event.model.Location;
 import ru.pracricum.ewmservice.event.repository.EventRepository;
 import ru.pracricum.ewmservice.exception.NotFoundException;
 import ru.pracricum.ewmservice.requests.dto.ParticipationRequestDto;
 import ru.pracricum.ewmservice.requests.mapper.RequestMapper;
+import ru.pracricum.ewmservice.requests.model.ParticipationStatus;
 import ru.pracricum.ewmservice.requests.model.Requests;
 import ru.pracricum.ewmservice.requests.repository.RequestsRepository;
 import ru.pracricum.ewmservice.user.dto.UserDto;
@@ -24,6 +28,8 @@ import ru.pracricum.ewmservice.util.PageRequestOverride;
 
 import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +46,7 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final CategoriesRepository categoriesRepository;
     private final RequestsRepository requestsRepository;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public List<EventShortDto> getEvents(
@@ -92,7 +99,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getEventsByUser(Long userId, int from, int size) {
+    public List<EventShortDto> getEventsByUser(
+            Long userId,
+            int from,
+            int size) {
         PageRequestOverride pageRequest = PageRequestOverride.of(from, size);
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
@@ -105,7 +115,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getEventByIdForUser(Long userId, Long eventId) {
+    public EventFullDto getEventByIdForUser(
+            Long userId,
+            Long eventId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Пользователь %s не существует.", userId)));
@@ -117,7 +129,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ParticipationRequestDto> getRequestsParticipationInEvent(Long userId, Long eventId) {
+    public List<ParticipationRequestDto> getRequestsParticipationInEvent(
+            Long userId,
+            Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Событие %s не существует.", eventId)));
@@ -129,7 +143,7 @@ public class EventServiceImpl implements EventService {
                     "Данный пользователь не может обновлять текущее событие");
         }
 
-        return requestsRepository.findByEventId(eventId)
+        return requestsRepository.findByEvent(eventId)
                 .stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());
@@ -137,7 +151,15 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto createEvent(Long userId, NewEventDto newEventDto) {
+    public EventFullDto createEvent(
+            Long userId,
+            NewEventDto newEventDto) {
+        if (newEventDto.getAnnotation() == null) {
+            throw new NotFoundException("Аннотация не может быть пустым");
+        }
+        if (newEventDto.getDescription() == null) {
+            throw new NotFoundException("Описание не может быть пустым");
+        }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Пользователь %s не существует.", userId)));
@@ -166,7 +188,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto updateEventByUser(Long userId, UpdateEventRequest updateEventRequest) {
+    public EventFullDto updateEventByUser(
+            Long userId,
+            UpdateEventRequest updateEventRequest) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Пользователь %s не существует.", userId)));
@@ -207,7 +231,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto cancelEventForUser(Long userId, Long eventId) {
+    public EventFullDto cancelEventForUser(
+            Long userId,
+            Long eventId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Пользователь %s не существует.", userId)));
@@ -231,31 +257,138 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public ParticipationRequestDto confirmRequestsParticipationForEvent(Long userId, Long eventId, Long reqId) {
-        return null;
+    public ParticipationRequestDto confirmRequestsParticipationForEvent(
+            Long userId,
+            Long eventId,
+            Long reqId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Пользователь %s не существует.", userId)));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Событие %s не существует.", eventId)));
+        Requests requests = requestsRepository.findById(reqId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Запрос на участие %s не существует.", eventId)));
+
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
+        if (!eventFullDto.getInitiator().getId().equals(userId)) {
+            throw new NotFoundException("Can only be confirmed by the initiator");
+        }
+        if (!eventFullDto.getState().equals(EventState.PUBLISHED)) {
+            throw new NotFoundException("Cannot confirm a request to participate in an unpublished event");
+        }
+        if(eventFullDto.getConfirmedRequests() == eventFullDto.getParticipantLimit()) {
+            throw new NotFoundException("Participant limit reached");
+        }
+        requests.setStatus(ParticipationStatus.CONFIRMED);
+        return RequestMapper.toRequestDto(requestsRepository.save(requests));
     }
 
     @Override
     @Transactional
-    public ParticipationRequestDto rejectRequestsParticipationForEvent(Long userId, Long eventId, Long reqId) {
-        return null;
+    public ParticipationRequestDto rejectRequestsParticipationForEvent(
+            Long userId,
+            Long eventId,
+            Long reqId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Пользователь %s не существует.", userId)));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Событие %s не существует.", eventId)));
+        Requests requests = requestsRepository.findById(reqId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("Запрос на участие %s не существует.", eventId)));
+
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
+        if (!eventFullDto.getInitiator().getId().equals(userId)) {
+            throw new NotFoundException("Can only be confirmed by the initiator");
+        }
+        if (!eventFullDto.getState().equals(EventState.PUBLISHED)) {
+            throw new NotFoundException("Cannot confirm a request to participate in an unpublished event");
+        }
+        requests.setStatus(ParticipationStatus.REJECTED);
+        return RequestMapper.toRequestDto(requestsRepository.save(requests));
     }
 
     @Override
     public List<EventFullDto> searchEvents(
-            List<UserDto> usersId,
+            List<Long> usersId,
             List<EventState> eventStates,
-            List<CategoriesDto> categories,
-            LocalDateTime startSearch,
-            LocalDateTime endSearch,
+            List<Long> categories,
+            String rangeStart,
+            String  rangeEnd,
             int from,
             int size) {
-        return null;
+        PageRequestOverride pageRequest = PageRequestOverride.of(from, size);
+
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (rangeStart != null) {
+            try {
+                start = LocalDateTime.parse(rangeStart, formatter);
+            } catch (NotFoundException e) {
+                throw new NotFoundException("Incorrect rangeStart value = " + rangeStart);
+            }
+        }
+        if (rangeEnd != null) {
+            try {
+                end = LocalDateTime.parse(rangeEnd, formatter);
+            } catch (NotFoundException e) {
+                throw new NotFoundException("Incorrect rangeEnd value = " + rangeEnd);
+            }
+        }
+
+        start = (rangeStart != null) ? start : LocalDateTime.now();
+        end = (rangeEnd != null) ? end : LocalDateTime.now().plusYears(300);
+
+        if (start.isAfter(end)) {
+            throw new NotFoundException("Ending event before it starts");
+        }
+
+        if (eventStates == null) {
+            eventStates = new ArrayList<>();
+            eventStates.add(EventState.PENDING);
+            eventStates.add(EventState.CANCELED);
+            eventStates.add(EventState.PUBLISHED);
+        };
+
+        List<Event> events = new ArrayList<>();
+
+        if ((categories != null) && (usersId != null)) {
+            events = eventRepository.findByInitiatorAndCategoriesAndState(
+                    usersId,
+                    categories,
+                    eventStates,
+                    pageRequest);
+        }
+
+        if ((categories == null) && (usersId == null)) {
+            events = eventRepository.findByState(eventStates, pageRequest);
+        }
+
+        if ((categories != null) && (usersId == null)) {
+            events = eventRepository.findByCategoriesAndState(categories, eventStates, pageRequest);
+        }
+
+        if ((categories == null) && (usersId != null)) {
+            events = eventRepository.findByInitiatorAndState(usersId, eventStates, pageRequest);
+        }
+
+        List<EventFullDto> eventFullDtos = events
+                .stream()
+                .map(EventMapper::toEventFullDto)
+                .collect(toList());
+
+        return eventFullDtos;
     }
 
     @Override
     @Transactional
-    public EventFullDto putEvent(Long eventId, AdminUpdateEventRequest adminUpdateEventRequest) {
+    public EventFullDto putEvent(
+            Long eventId,
+            AdminUpdateEventRequest adminUpdateEventRequest) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Событие %s не существует.", eventId)));
@@ -317,11 +450,11 @@ public class EventServiceImpl implements EventService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Событие %s не существует.", eventId)));
-        if (event.getState().equals(EventState.PENDING) || event.getState().equals(EventState.CANCELED)) {
-            event.setState(EventState.REJECTED);
+        if (event.getState().equals(EventState.PENDING) || event.getState().equals(EventState.REJECTED)) {
+            event.setState(EventState.CANCELED);
             Event eventSave = eventRepository.save(event);
             return EventMapper.toEventFullDto(eventSave);
-        } else if (event.getState().equals(EventState.REJECTED)) {
+        } else if (event.getState().equals(EventState.CANCELED)) {
             throw new NotFoundException("Событие уже отклонено");
         } else {
             throw new NotFoundException("Невозможно отклонено событие, поскольку оно уже опубликовано");

@@ -1,17 +1,16 @@
 package ru.pracricum.ewmservice.exception;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ErrorResponse {
 
-    private String error;
+    String error;
+    String message;
+    ErrorStatusEwm status;
 
-    public ErrorResponse(String error) {
-        this.error = error;
-    }
 }

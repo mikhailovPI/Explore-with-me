@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.pracricum.ewmservice.event.dto.EventShortDto;
-import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.requests.model.ParticipationStatus;
 
 import java.time.LocalDateTime;
@@ -25,6 +23,6 @@ public class ParticipationRequestDto {
 
     Long requester;
 
-    ParticipationStatus state;
+    ParticipationStatus status;
 
 }

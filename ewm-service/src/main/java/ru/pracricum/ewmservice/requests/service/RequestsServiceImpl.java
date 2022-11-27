@@ -60,26 +60,25 @@ public class RequestsServiceImpl implements RequestsService {
                 throw new NotFoundException("Свободных мест нет!");
             }
         }
-        ParticipationRequestDto requestDto = new ParticipationRequestDto(
-                null,
-                LocalDateTime.now(),
-                eventId,
-                userId,
-                ParticipationStatus.PENDING);
+        LocalDateTime time = LocalDateTime.now();
+        ParticipationRequestDto requestDto = new ParticipationRequestDto();
+        requestDto.setCreated(time);
+        requestDto.setEvent(eventId);
+        requestDto.setRequester(userId);
+        requestDto.setStatus(ParticipationStatus.PENDING);
 
-        try {
-            return RequestMapper.toRequestDto(requestRepository.save(RequestMapper.toRequest(requestDto)));
-        } catch (RuntimeException e) {
-            throw new NotFoundException("Заяка научастие уже подана");
-        }
+        Requests request = RequestMapper.toRequest(requestDto);
+        Requests requestsSave = requestRepository.save(request);
+
+        return RequestMapper.toRequestDto(requestsSave);
     }
 
     @Override
     @Transactional
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) throws ValidationException {
         Requests request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new NotFoundException("Request for participation in the event with id = " + requestId +
-                        " not found"));
+                .orElseThrow(() -> new NotFoundException("Request for participation in the event with id = "
+                        + requestId + " not found"));
 
         if (!userId.equals(request.getRequester())) {
             throw new ValidationException("Only the user who created the request can cancel it");

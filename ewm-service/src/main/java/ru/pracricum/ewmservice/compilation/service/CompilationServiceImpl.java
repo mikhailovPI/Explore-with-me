@@ -50,6 +50,10 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public CompilationDto createCompilation(NewCompilationDto compilationDto) {
+        if (compilationDto.getTitle() == null) {
+            throw new NotFoundException("Описание подсборки не может быть пустым");
+        }
+
         List<Event> eventList = eventService.getEventsByIds(compilationDto.getEvents());
 
         Compilation compilation = CompilationMapper.toCompilationNew(compilationDto);

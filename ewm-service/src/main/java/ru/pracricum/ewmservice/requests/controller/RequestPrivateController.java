@@ -19,7 +19,7 @@ import java.util.List;
 @Validated
 public class RequestPrivateController {
 
-    public static RequestsService requestsService;
+    private final RequestsService requestsService;
 
     @GetMapping
     public List<ParticipationRequestDto> getInformationRequest(@PathVariable Long userId) {
@@ -31,8 +31,11 @@ public class RequestPrivateController {
     @PostMapping
     public ParticipationRequestDto createRequest(
             @PathVariable Long userId,
-            @NotNull @RequestParam(name = "eventId", required = false) Long eventId) {
+            @RequestParam(name = "eventId", required = false) Long eventId) {
         log.info("URL: /users/{userId}/requests. PostMapping/Получение всех пользователей");
+        if (eventId == null) {
+            throw new NotFoundException("dfsd");
+        }
         return requestsService.createRequest(userId, eventId);
     }
 

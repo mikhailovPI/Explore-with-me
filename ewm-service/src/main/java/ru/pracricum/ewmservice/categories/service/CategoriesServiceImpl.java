@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.pracricum.ewmservice.exception.NotExistObjectException;
+import ru.pracricum.ewmservice.exception.NotFoundException;
 import ru.pracricum.ewmservice.util.PageRequestOverride;
 import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
 import ru.pracricum.ewmservice.categories.mapper.CategoriesMapper;
@@ -41,6 +42,9 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     @Transactional
     public CategoriesDto createCategory(CategoriesDto categoriesDto) {
+        if (categoriesDto.getName() == null) {
+            throw new NotFoundException("Название категории не может быть пустым");
+        }
         categoriesRepository.findByNameOrderByName()
                 .stream()
                 .filter(name -> name.equals(categoriesDto.getName())).forEachOrdered(name -> {
@@ -55,6 +59,9 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     @Transactional
     public CategoriesDto patchCategory(CategoriesDto categoriesDto) {
+        if (categoriesDto.getName() == null) {
+            throw new NotFoundException("Название категории не может быть пустым");
+        }
         categoriesRepository.findByNameOrderByName()
                 .stream()
                 .filter(name -> name.equals(categoriesDto.getName())).forEachOrdered(name -> {

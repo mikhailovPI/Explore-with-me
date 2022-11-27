@@ -48,6 +48,9 @@ public class UserServiceImpl implements UserService {
         if (!userDto.getEmail().contains("@")) {
             throw new ValidationException("Введен некорректный e-mail.");
         }
+        if (userDto.getName() == null) {
+            throw new ValidationException("Name не должен быть пустым.");
+        }
         userRepository.findByNameOrderByName()
                 .stream()
                 .filter(name -> name.equals(userDto.getName()))

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "requests", schema = "public")
+@Table(name = "request", schema = "public")
 public class Requests {
 
     @Id
@@ -26,13 +26,15 @@ public class Requests {
     @Column(name = "request_id")
     Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    Event event;
+    //@ManyToOne
+    //@JoinColumn(name = "event_id")
+    @Column(name = "event_id")
+    Long event;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    User requester;
+    //@ManyToOne
+    //@JoinColumn(name = "user_id")
+    @Column(name = "user_id")
+    Long requester;
 
     @Column(name = "created")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = DateTimeFormat.ISO.DATE_TIME)
