@@ -247,27 +247,27 @@ public class EventServiceImpl implements EventService {
             List<Long> usersId,
             List<EventState> eventStates,
             List<Long> categories,
-            String rangeStart,
-            String rangeEnd,
+            LocalDateTime rangeStart,
+            LocalDateTime rangeEnd,
             int from,
             int size) {
         PageRequestOverride pageRequest = PageRequestOverride.of(from, size);
         LocalDateTime start = null;
         LocalDateTime end = null;
-        if (rangeStart != null) {
-            try {
-                start = LocalDateTime.parse(rangeStart, formatter);
-            } catch (NotFoundException e) {
-                throw new NotFoundException("Не корректное время начала диапазона " + rangeStart);
-            }
-        }
-        if (rangeEnd != null) {
-            try {
-                end = LocalDateTime.parse(rangeEnd, formatter);
-            } catch (NotFoundException e) {
-                throw new NotFoundException("Не корректное время окончания диапазона " + rangeEnd);
-            }
-        }
+//        if (rangeStart != null) {
+//            try {
+//                start = LocalDateTime.parse(rangeStart, formatter);
+//            } catch (NotFoundException e) {
+//                throw new NotFoundException("Не корректное время начала диапазона " + rangeStart);
+//            }
+//        }
+//        if (rangeEnd != null) {
+//            try {
+//                end = LocalDateTime.parse(rangeEnd, formatter);
+//            } catch (NotFoundException e) {
+//                throw new NotFoundException("Не корректное время окончания диапазона " + rangeEnd);
+//            }
+//        }
 
         start = (rangeStart != null) ? start : LocalDateTime.now();
         end = (rangeEnd != null) ? end : LocalDateTime.now().plusYears(300);

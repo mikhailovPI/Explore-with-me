@@ -45,8 +45,8 @@ public interface EventService {
             List<Long> usersId,
             List<EventState> eventStates,
             List<Long> categories,
-            String rangeStart,
-            String  rangeEnd,
+            LocalDateTime rangeStart,
+            LocalDateTime rangeEnd,
             int from,
             int size);
 
