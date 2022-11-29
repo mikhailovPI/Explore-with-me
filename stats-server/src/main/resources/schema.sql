@@ -1,4 +1,4 @@
-drop table stats cascade;
+--drop table stats cascade;
 
 CREATE TABLE IF NOT EXISTS stats
 (

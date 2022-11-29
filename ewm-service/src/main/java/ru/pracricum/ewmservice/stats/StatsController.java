@@ -17,7 +17,6 @@ import java.util.List;
 @Slf4j
 @Validated
 public class StatsController {
-
     private final StatsClient statsClient;
 
     @GetMapping(path = "/stats")
