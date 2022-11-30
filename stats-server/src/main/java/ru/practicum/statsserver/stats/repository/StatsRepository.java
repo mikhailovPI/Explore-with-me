@@ -10,11 +10,14 @@ import java.util.List;
 
 public interface StatsRepository extends JpaRepository<Stats, Long> {
 
-    @Query("SELECT new ru.practicum.statsserver.stats.dto.ViewStats(e.app, e.uri, COUNT (e.ip)) " +
-            "from Stats e WHERE e.timestamp> ?1 AND e.timestamp< ?2 GROUP BY e.app, e.uri")
-    List<ViewStats> getAll(LocalDateTime start, LocalDateTime end, List<String> uris);
+    List<Stats> findAllByUri(String uri);
 
-    @Query("SELECT new ru.practicum.statsserver.stats.dto.ViewStats(e.app, e.uri, COUNT (DISTINCT e.ip)) from " +
-            "Stats e WHERE e.timestamp> ?1 AND e.timestamp< ?2 GROUP BY e.app, e.uri")
-    List<ViewStats> getAllUnique(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique);
+    @Query(value = "SELECT DISTINCT s.app, s.uri, s.ip FROM Stats as s WHERE s.uri = ?1")
+    List<Stats> findDistinctByUriAndIpAndApp(String uri);
+
+    List<Stats> findAllByUriAndTimestampBetween(String uri, LocalDateTime start, LocalDateTime end);
+
+    @Query(value = "SELECT DISTINCT s.app, s.uri, s.ip FROM Stats as s WHERE s.uri = ?1 AND s.timestamp BETWEEN ?2 AND ?3")
+    List<Stats> findDistinctByUriAndTimestampBetween(String uri, LocalDateTime start, LocalDateTime end);
+
 }

@@ -34,7 +34,7 @@ public class EventMapper {
                 event.getRequestModeration(),
                 event.getState(),
                 event.getTitle(),
-                event.getViews());
+                null);
     }
 
     public static EventShortDto toEventShortDto(Event event) {
@@ -51,7 +51,7 @@ public class EventMapper {
                         event.getInitiator().getName()),
                 event.getPaid(),
                 event.getTitle(),
-                event.getViews());
+                null);
     }
 
     public static Event toEventNew(NewEventDto newEventDto) {
@@ -71,7 +71,6 @@ public class EventMapper {
                 null,
                 newEventDto.getRequestModeration(),
                 EventState.PENDING,
-                newEventDto.getTitle(),
-                null);
+                newEventDto.getTitle());
     }
 }

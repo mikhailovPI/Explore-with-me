@@ -39,8 +39,7 @@ public class StatsClient extends BaseClient {
         return get(parameters);
     }
 
-    public void createStat(
-            EndpointHit endpointHit) {
+    public void createStat(EndpointHit endpointHit) {
         post(endpointHit);
     }
 

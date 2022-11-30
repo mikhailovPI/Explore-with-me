@@ -6,7 +6,7 @@ import ru.pracricum.ewmservice.event.model.Event;
 import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.requests.dto.ParticipationRequestDto;
 
-import javax.xml.bind.ValidationException;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,9 +21,10 @@ public interface EventService {
             Boolean onlyAvailable,
             String sort,
             int from,
-            int size) throws ValidationException;
+            int size,
+            HttpServletRequest request);
 
-    EventFullDto getEventById(Long eventId);
+    EventFullDto getEventById(Long eventId, HttpServletRequest request);
 
     List<EventShortDto> getEventsByUser(Long userId, int from, int size);
 

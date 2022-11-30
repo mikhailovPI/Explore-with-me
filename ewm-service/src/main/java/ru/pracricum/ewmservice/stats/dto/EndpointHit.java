@@ -16,8 +16,6 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EndpointHit {
 
-    Long id;
-
     String app;
 
     String uri;

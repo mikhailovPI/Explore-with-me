@@ -17,11 +17,13 @@ import ru.pracricum.ewmservice.requests.mapper.RequestMapper;
 import ru.pracricum.ewmservice.requests.model.ParticipationStatus;
 import ru.pracricum.ewmservice.requests.model.Requests;
 import ru.pracricum.ewmservice.requests.repository.RequestsRepository;
+import ru.pracricum.ewmservice.stats.client.StatsClient;
+import ru.pracricum.ewmservice.stats.dto.EndpointHit;
 import ru.pracricum.ewmservice.user.model.User;
 import ru.pracricum.ewmservice.user.repository.UserRepository;
 import ru.pracricum.ewmservice.util.PageRequestOverride;
 
-import javax.xml.bind.ValidationException;
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -40,6 +42,7 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final CategoriesRepository categoriesRepository;
     private final RequestsRepository requestsRepository;
+    private final StatsClient statsClient;
 
     @Override
     public List<EventShortDto> getEvents(
@@ -51,13 +54,15 @@ public class EventServiceImpl implements EventService {
             Boolean onlyAvailable,
             String sort,
             int from,
-            int size) throws ValidationException {
+            int size,
+            HttpServletRequest request) {
+        saveEndpointHit(request);
         rangeStart = (rangeStart != null) ? rangeStart : LocalDateTime.now();
         rangeEnd = (rangeEnd != null) ? rangeEnd : LocalDateTime.now().plusYears(300);
-
         if (rangeStart.isAfter(rangeEnd)) {
-            throw new ValidationException("Время окончания события не может быть раньше времени начала события");
+            throw new NotFoundException("Время окончания события не может быть раньше времени начала события");
         }
+
         List<Event> events;
         if (categories != null) {
             events = eventRepository.findByCategoryIdsAndText(text, categories);
@@ -75,13 +80,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getEventById(Long eventId) {
+    public EventFullDto getEventById(Long eventId, HttpServletRequest request) {
         Event event = validationEvent(eventId);
+        saveEndpointHit(request);
         if (event.getState().equals(EventState.PUBLISHED)) {
-            Long views = event.getViews();
-            Long viewsS = views+1;
-            event.setViews(viewsS);
-            eventRepository.save(event);
             return EventMapper.toEventFullDto(event);
         } else {
             throw new NotFoundException("Событие нельзя посмотреть, т.к. оно не опубликовано");
@@ -145,7 +147,6 @@ public class EventServiceImpl implements EventService {
         event.setConformedRequests(0);
         event.setInitiator(user);
         event.setCategories(categories);
-        event.setViews(0L);
 
         Event eventSave = eventRepository.save(event);
         return EventMapper.toEventFullDto(eventSave);
@@ -452,5 +453,14 @@ public class EventServiceImpl implements EventService {
         if (eventFullDto.getConfirmedRequests() == eventFullDto.getParticipantLimit()) {
             throw new NotFoundException("Сводобных мест на событие нет");
         }
+    }
+
+    private void saveEndpointHit(HttpServletRequest request) {
+        EndpointHit endpointHit = new EndpointHit(
+                request.getServerName(),
+                request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now());
+        statsClient.createStat(endpointHit);
     }
 }

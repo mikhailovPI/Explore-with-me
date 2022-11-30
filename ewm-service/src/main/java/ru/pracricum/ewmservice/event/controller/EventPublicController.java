@@ -8,6 +8,7 @@ import ru.pracricum.ewmservice.event.dto.EventFullDto;
 import ru.pracricum.ewmservice.event.dto.EventShortDto;
 import ru.pracricum.ewmservice.event.service.EventService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,7 +37,8 @@ public class EventPublicController {
             @RequestParam(required = false) Boolean onlyAvailable,
             @RequestParam(required = false) String sort,
             @RequestParam(name = "from", defaultValue = "0") int from,
-            @RequestParam(name = "size", defaultValue = "10") int size) throws ValidationException {
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            HttpServletRequest request) {
         log.info("URL: /events. PostMapping/Получение списка событий с фильтрами/getEvents");
         return eventService.getEvents(
                 text,
@@ -49,13 +51,15 @@ public class EventPublicController {
                 onlyAvailable,
                 sort,
                 from,
-                size);
+                size,
+                request);
     }
 
     @GetMapping(path = "/{eventId}")
     public EventFullDto getEventById(
-            @PathVariable Long eventId) {
+            @PathVariable Long eventId,
+            HttpServletRequest request) {
         log.info("URL: /event/{eventId}. GetMapping/Получение события " + eventId + "/getEventById");
-        return eventService.getEventById(eventId);
+        return eventService.getEventById(eventId, request);
     }
 }
