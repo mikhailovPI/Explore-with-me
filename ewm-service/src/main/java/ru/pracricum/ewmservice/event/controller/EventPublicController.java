@@ -9,9 +9,7 @@ import ru.pracricum.ewmservice.event.dto.EventShortDto;
 import ru.pracricum.ewmservice.event.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.ValidationException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -21,7 +19,6 @@ import java.util.List;
 public class EventPublicController {
 
     private final EventService eventService;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping
     public List<EventShortDto> getEvents(
@@ -44,10 +41,8 @@ public class EventPublicController {
                 text,
                 categories,
                 paid,
-                rangeStart
-                /*LocalDateTime.parse(rangeStart, formatter)*/,
-                rangeEnd
-                /*LocalDateTime.parse(rangeEnd, formatter)*/,
+                rangeStart,
+                rangeEnd,
                 onlyAvailable,
                 sort,
                 from,

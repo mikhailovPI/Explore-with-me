@@ -6,15 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.statsserver.stats.dto.EndpointHit;
 import ru.practicum.statsserver.stats.dto.ViewStats;
 import ru.practicum.statsserver.stats.mapper.StatsMapper;
-import ru.practicum.statsserver.stats.model.Stats;
 import ru.practicum.statsserver.stats.repository.StatsRepository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

@@ -1,14 +1,3 @@
---drop table compilation_of_events cascade;
-
---drop table compilation cascade;
-
---drop table request cascade;
-
---drop table events cascade;
-
---drop table categories cascade;
-
---drop table users cascade;
 
 CREATE TABLE IF NOT EXISTS users
 (
