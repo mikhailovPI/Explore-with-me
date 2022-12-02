@@ -26,9 +26,9 @@ public class CategoriesAdminController {
         return categoriesService.patchCategory(categoriesDto);
     }
 
-    @DeleteMapping(path = "/{catId}")
-    public void deleteCategory(@PathVariable Long catId) {
-        log.info("URL: /admin/categories/{catId}. DeleteMapping/Удаление категории/deleteCategory");
-        categoriesService.deleteCategoryById(catId);
+    @DeleteMapping(path = "/{categoryId}")
+    public void deleteCategory(@PathVariable Long categoryId) {
+        log.info("URL: /admin/categories/{categoryId}. DeleteMapping/Удаление категории/deleteCategory");
+        categoriesService.deleteCategoryById(categoryId);
     }
 }

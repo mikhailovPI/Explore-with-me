@@ -20,6 +20,8 @@ public class EventAdminController {
 
     private final EventService eventService;
 
+    private final static String URL_EVENT_ADMIN = "/{eventId}";
+
     @GetMapping
     public List<EventFullDto> searchEvents(
             @RequestParam(name = "users", required = false) List<Long> usersId,
@@ -42,7 +44,7 @@ public class EventAdminController {
                 size);
     }
 
-    @PutMapping(path = "/{eventId}")
+    @PutMapping(path = URL_EVENT_ADMIN)
     public EventFullDto putEvent(
             @PathVariable Long eventId,
             @RequestBody AdminUpdateEventRequest adminUpdateEventRequest) {
@@ -50,13 +52,13 @@ public class EventAdminController {
         return eventService.putEvent(eventId, adminUpdateEventRequest);
     }
 
-    @PatchMapping(path = "/{eventId}/publish")
+    @PatchMapping(path = URL_EVENT_ADMIN + "/publish")
     public EventFullDto publishEvent(@PathVariable Long eventId) {
         log.info("URL: /admin/events/{eventId}/publish. PatchMapping/Публикация события " + eventId + "/publishEvent");
         return eventService.publishEvent(eventId);
     }
 
-    @PatchMapping(path = "/{eventId}/reject")
+    @PatchMapping(path = URL_EVENT_ADMIN + "/reject")
     public EventFullDto rejectEvent(@PathVariable Long eventId) {
         log.info("URL: /admin/events/{eventId}/reject. PatchMapping/Отклонениния события " + eventId + "/rejectEvent");
         return eventService.rejectEvent(eventId);

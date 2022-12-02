@@ -24,9 +24,10 @@ public class CategoriesPublicController {
         return categoriesService.getCategoryList(from, size);
     }
 
-    @GetMapping(path = "/{catId}")
-    public CategoriesDto getCategoryById(@PathVariable Long catId) {
-        log.info("URL: /categories/{catId}. GetMapping/Получение категории по id " + catId + "/getCategoryById");
-        return categoriesService.getCategoryById(catId);
+    @GetMapping(path = "/{categoryId}")
+    public CategoriesDto getCategoryById(@PathVariable Long categoryId) {
+        log.info("URL: /categories/{categoryId}. GetMapping/Получение категории по id " + categoryId
+                + "/getCategoryById");
+        return categoriesService.getCategoryById(categoryId);
     }
 }

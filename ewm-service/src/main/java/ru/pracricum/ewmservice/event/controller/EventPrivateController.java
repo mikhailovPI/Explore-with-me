@@ -22,6 +22,9 @@ public class EventPrivateController {
 
     private final EventService eventService;
 
+    private final static String URL_EVENT_PRIVATE = "/{eventId}";
+    private final static String URL_EVENT_PRIVATE_REQUEST = "/{eventId}/requests/{reqId}";
+
     @GetMapping
     public List<EventShortDto> getEventsByUser(
             @PathVariable Long userId,
@@ -31,7 +34,7 @@ public class EventPrivateController {
         return eventService.getEventsByUser(userId, from, size);
     }
 
-    @GetMapping(path = "/{eventId}")
+    @GetMapping(path = URL_EVENT_PRIVATE)
     public EventFullDto getEventByIdForUser(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
@@ -40,7 +43,7 @@ public class EventPrivateController {
         return eventService.getEventByIdForUser(userId, eventId);
     }
 
-    @GetMapping(path = "/{eventId}/requests")
+    @GetMapping(path = URL_EVENT_PRIVATE + "/requests")
     public List<ParticipationRequestDto> getRequestsParticipationInEvent(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
@@ -67,7 +70,7 @@ public class EventPrivateController {
         return eventService.updateEventByUser(userId, updateEventRequest);
     }
 
-    @PatchMapping(path = "/{eventId}")
+    @PatchMapping(path = URL_EVENT_PRIVATE)
     public EventFullDto cancelEventForUser(
             @PathVariable Long userId,
             @PathVariable Long eventId) {
@@ -76,7 +79,7 @@ public class EventPrivateController {
         return eventService.cancelEventForUser(userId, eventId);
     }
 
-    @PatchMapping(path = "/{eventId}/requests/{reqId}/confirm")
+    @PatchMapping(path = URL_EVENT_PRIVATE_REQUEST + "/confirm")
     public ParticipationRequestDto confirmRequestsParticipationForEvent(
             @PathVariable Long userId,
             @PathVariable Long eventId,
@@ -89,7 +92,7 @@ public class EventPrivateController {
         return eventService.confirmRequestsParticipationForEvent(userId, eventId, reqId);
     }
 
-    @PatchMapping(path = "/{eventId}/requests/{reqId}/reject")
+    @PatchMapping(path = URL_EVENT_PRIVATE_REQUEST + "/reject")
     public ParticipationRequestDto rejectRequestsParticipationForEvent(
             @PathVariable Long userId,
             @PathVariable Long eventId,

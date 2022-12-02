@@ -32,8 +32,8 @@ public class CategoriesServiceImpl implements CategoriesService {
     }
 
     @Override
-    public CategoriesDto getCategoryById(Long catId) {
-        Categories categories = validationCategories(catId);
+    public CategoriesDto getCategoryById(Long categoryId) {
+        Categories categories = validationCategories(categoryId);
         return CategoriesMapper.toCategoryDto(categories);
     }
 
@@ -71,8 +71,8 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Override
     @Transactional
-    public void deleteCategoryById(Long catId) {
-        categoriesRepository.deleteById(catId);
+    public void deleteCategoryById(Long categoryId) {
+        categoriesRepository.deleteById(categoryId);
     }
 
     private Categories validationCategories(Long catId) {

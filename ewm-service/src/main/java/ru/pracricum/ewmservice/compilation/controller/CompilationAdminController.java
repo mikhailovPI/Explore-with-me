@@ -14,6 +14,7 @@ import ru.pracricum.ewmservice.compilation.service.CompilationService;
 public class CompilationAdminController {
 
     private final CompilationService compilationService;
+    private final static String URL_COMP = "/{compId}";
 
     @PostMapping
     public CompilationDto createCompilation(@RequestBody NewCompilationDto compilationDto) {
@@ -21,7 +22,7 @@ public class CompilationAdminController {
         return compilationService.createCompilation(compilationDto);
     }
 
-    @PatchMapping(path = "/{compId}/events/{eventId}")
+    @PatchMapping(path = URL_COMP + "/events/{eventId}")
     public void addEventToCompilation(
             @PathVariable Long compId,
             @PathVariable Long eventId) {
@@ -30,21 +31,21 @@ public class CompilationAdminController {
         compilationService.addEventToCompilation(compId, eventId);
     }
 
-    @PatchMapping(path = "/{compId}/pin")
+    @PatchMapping(path = URL_COMP + "/pin")
     public void fixCompilationOnMainPage(@PathVariable Long compId) {
         log.info("URL: /admin/compilations/{compId}/events/{eventId}. PatchMapping/Закрепить подборку " + compId
                 + " на главной странице/fixCompilationOnMainPage");
         compilationService.fixCompilationOnMainPage(compId);
     }
 
-    @DeleteMapping(path = "/{compId}")
+    @DeleteMapping(path = URL_COMP)
     public void deleteCompilationById(@PathVariable Long compId) {
         log.info("URL: /admin/compilations/{compId}/events/{eventId}. DeleteMapping/Удаление подборки " + compId +
                 "/deleteCompilationById");
         compilationService.deleteCompilationById(compId);
     }
 
-    @DeleteMapping(path = "/{compId}/events/{eventId}")
+    @DeleteMapping(path = URL_COMP + "/events/{eventId}")
     public void deleteEventToCompilation(
             @PathVariable Long compId,
             @PathVariable Long eventId) {
@@ -53,7 +54,7 @@ public class CompilationAdminController {
         compilationService.deleteEventToCompilation(compId, eventId);
     }
 
-    @DeleteMapping(path = "/{compId}/pin")
+    @DeleteMapping(path = URL_COMP + "/pin")
     public void deleteCompilationOnMainPage(@PathVariable Long compId) {
         log.info("URL: /admin/compilations/{compId}/events/{eventId}. DeleteMapping/Открепить подборку " + compId
                 + " с главной страницы/deleteCompilationOnMainPage");

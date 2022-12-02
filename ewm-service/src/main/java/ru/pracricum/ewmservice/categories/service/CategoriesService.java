@@ -9,11 +9,11 @@ import java.util.List;
 public interface CategoriesService {
     List<CategoriesDto> getCategoryList(int from, int size);
 
-    CategoriesDto getCategoryById(Long catId);
+    CategoriesDto getCategoryById(Long categoryId);
 
     CategoriesDto createCategory(CategoriesDto categoriesDto);
 
     CategoriesDto patchCategory(CategoriesDto categoriesDto);
 
-    void deleteCategoryById(Long catId);
+    void deleteCategoryById(Long categoryId);
 }
