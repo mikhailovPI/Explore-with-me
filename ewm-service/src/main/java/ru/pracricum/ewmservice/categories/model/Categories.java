@@ -12,7 +12,6 @@ import static ru.pracricum.ewmservice.categories.model.Categories.SCHEMA_TABLE;
 @ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = Categories.TABLE_CATEGORIES, schema = SCHEMA_TABLE)
