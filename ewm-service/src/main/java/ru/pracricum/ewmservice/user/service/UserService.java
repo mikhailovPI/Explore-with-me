@@ -13,4 +13,7 @@ public interface UserService {
     UserDto createUser(NewUserRequest userDto);
 
     void deleteUserById(Long userId);
+
+    void putLikes(Long userId, Long valuerId);
+    void deleteLikes(Long userId, Long valuerId);
 }

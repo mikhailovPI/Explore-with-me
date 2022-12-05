@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import static ru.pracricum.ewmservice.user.model.User.TABLE_USERS;
 
@@ -23,6 +25,8 @@ public class User {
     public final static String USERS_ID = "user_id";
     public final static String USERS_NAME = "user_name";
     public final static String USERS_EMAIL = "email";
+    public final static String USERS_LIKES = "likes";
+    public final static String USERS_DISLIKES = "dislikes";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +38,13 @@ public class User {
 
     @Column(name = USERS_EMAIL)
     String email;
+
+/*    @Column(name = USERS_LIKES)
+    Long likes;
+
+    @Column(name = USERS_DISLIKES)
+    Long dislikes;*/
+
+/*    Set<Long> likesList = new HashSet<>();
+    Set<Long> dislikesList = new HashSet<>();*/
 }

@@ -10,13 +10,21 @@ public class UserMapper {
         return new UserDto(
                 user.getId(),
                 user.getName(),
-                user.getEmail());
+                user.getEmail()
+                //user.getLikes(),
+                //user.getDislikes()
+                 );
     }
 
     public static User toUserNew(NewUserRequest newUserRequest) {
         return new User(
                 null,
                 newUserRequest.getName(),
-                newUserRequest.getEmail());
+                newUserRequest.getEmail()
+                //0L,
+//                0L
+                );
     }
+
+
 }

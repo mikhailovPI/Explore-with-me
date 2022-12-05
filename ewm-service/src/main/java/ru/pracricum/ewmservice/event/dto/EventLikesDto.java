@@ -1,28 +1,15 @@
 package ru.pracricum.ewmservice.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
 import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
-import ru.pracricum.ewmservice.comments.model.Comments;
 import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.event.model.Location;
 import ru.pracricum.ewmservice.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-@Validated
-public class EventFullDto {
+public class EventLikesDto {
 
     Long id;
 
@@ -60,7 +47,6 @@ public class EventFullDto {
 
     String title;
 
-    List<Comments> commentsList;
-
     Long views;
+
 }

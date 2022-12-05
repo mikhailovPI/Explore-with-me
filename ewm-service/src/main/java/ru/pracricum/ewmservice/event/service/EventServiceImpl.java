@@ -17,7 +17,7 @@ import ru.pracricum.ewmservice.requests.mapper.RequestMapper;
 import ru.pracricum.ewmservice.requests.model.ParticipationStatus;
 import ru.pracricum.ewmservice.requests.model.Requests;
 import ru.pracricum.ewmservice.requests.repository.RequestsRepository;
-import ru.pracricum.ewmservice.stats.client.StatsClient;
+//import ru.pracricum.ewmservice.stats.client.StatsClient;
 import ru.pracricum.ewmservice.stats.dto.EndpointHit;
 import ru.pracricum.ewmservice.user.model.User;
 import ru.pracricum.ewmservice.user.repository.UserRepository;
@@ -42,7 +42,7 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
     private final CategoriesRepository categoriesRepository;
     private final RequestsRepository requestsRepository;
-    private final StatsClient statsClient;
+//    private final StatsClient statsClient;
 
     @Override
     public List<EventShortDto> getEvents(
@@ -56,7 +56,7 @@ public class EventServiceImpl implements EventService {
             int from,
             int size,
             HttpServletRequest request) {
-        saveEndpointHit(request);
+        //saveEndpointHit(request);
         rangeStart = (rangeStart != null) ? rangeStart : LocalDateTime.now();
         rangeEnd = (rangeEnd != null) ? rangeEnd : LocalDateTime.now().plusYears(300);
         if (rangeStart.isAfter(rangeEnd)) {
@@ -82,7 +82,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto getEventById(Long eventId, HttpServletRequest request) {
         Event event = validationEvent(eventId);
-        saveEndpointHit(request);
+        //saveEndpointHit(request);
         if (event.getState().equals(EventState.PUBLISHED)) {
             return EventMapper.toEventFullDto(event);
         } else {
@@ -455,12 +455,12 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private void saveEndpointHit(HttpServletRequest request) {
-        EndpointHit endpointHit = new EndpointHit(
-                request.getServerName(),
-                request.getRequestURI(),
-                request.getRemoteAddr(),
-                LocalDateTime.now());
-        statsClient.createStat(endpointHit);
-    }
+//    private void saveEndpointHit(HttpServletRequest request) {
+//        EndpointHit endpointHit = new EndpointHit(
+//                request.getServerName(),
+//                request.getRequestURI(),
+//                request.getRemoteAddr(),
+//                LocalDateTime.now());
+//        statsClient.createStat(endpointHit);
+//    }
 }
