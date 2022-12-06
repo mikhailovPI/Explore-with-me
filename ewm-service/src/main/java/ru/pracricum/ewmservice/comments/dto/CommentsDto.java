@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import ru.pracricum.ewmservice.event.model.Location;
+import ru.pracricum.ewmservice.event.dto.EventCommentsDto;
+import ru.pracricum.ewmservice.event.dto.EventShortDto;
+import ru.pracricum.ewmservice.user.dto.UserDto;
+import ru.pracricum.ewmservice.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +23,10 @@ public class CommentsDto {
     String text;
 
     Long user;
+    //UserShortDto user;
 
-    //LocalDateTime publishedOn;
+    Long event;
+    //EventCommentsDto event;
+
+    LocalDateTime publishedOn;
 }

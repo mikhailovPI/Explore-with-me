@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.pracricum.ewmservice.event.model.Event;
 import ru.pracricum.ewmservice.user.model.User;
 
 import javax.persistence.*;
@@ -27,8 +28,8 @@ public class Comments {
     public final static String COMMENT_ID = "comment_id";
     public final static String COMMENT_TEXT = "comment_text";
     public final static String COMMENT_USER_ID = "user_id";
-
-    public final static String COMMENT_PUBLISHED_ON = "published_on";
+    public final static String COMMENT_EVENT_ID = "event_id";
+    public final static String COMMENT_PUBLISHED_ON = "created_on";
 
 
     @Id
@@ -43,8 +44,12 @@ public class Comments {
     @JoinColumn(name = COMMENT_USER_ID)
     User user;
 
-//    @Column(name = COMMENT_PUBLISHED_ON)
-//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = DateTimeFormat.ISO.DATE_TIME)
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-//    LocalDateTime publishedOn;
+    @OneToOne
+    @JoinColumn(name = COMMENT_EVENT_ID)
+    Event event;
+
+    @Column(name = COMMENT_PUBLISHED_ON)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime publishedOn;
 }

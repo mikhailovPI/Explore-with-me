@@ -34,7 +34,6 @@ public class EventMapper {
                 event.getRequestModeration(),
                 event.getState(),
                 event.getTitle(),
-                event.getCommentsList(),
                 null);
     }
 
@@ -72,7 +71,6 @@ public class EventMapper {
                 null,
                 newEventDto.getRequestModeration(),
                 EventState.PENDING,
-                null,
                 newEventDto.getTitle());
     }
 }

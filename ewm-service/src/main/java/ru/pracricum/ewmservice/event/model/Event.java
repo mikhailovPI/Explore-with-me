@@ -114,10 +114,6 @@ public class Event {
     @Column(name = EVENTS_DISLIKES)
     Long dislikes;*/
 
-    @OneToMany
-    @JoinColumn(name = EVENTS_COMMENTS)
-    List<Comments> commentsList = new ArrayList<>();
-
     @Column(name = EVENTS_TITLE)
     String title;
 }

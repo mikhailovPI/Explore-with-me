@@ -15,6 +15,7 @@ import ru.pracricum.ewmservice.user.model.User;
 import ru.pracricum.ewmservice.user.repository.UserRepository;
 import ru.pracricum.ewmservice.util.PageRequestOverride;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,10 +32,9 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     public List<CommentsDto> getComments(Long eventId, int from, int size) {
         PageRequestOverride pageRequest = PageRequestOverride.of(from, size);
-        Event event = validationEvent(eventId);
+        validationEvent(eventId);
 
-        //commentsRepository.
-        return event.getCommentsList()
+        return commentsRepository.findCommentOrderByEventId(eventId, pageRequest)
                 .stream()
                 .map(CommentsMapper::toCommentDto)
                 .collect(Collectors.toList());
@@ -51,17 +51,25 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public List<CommentsDto> getCommentsByUser(Long userId, int from, int size) {
-        return null;
+        PageRequestOverride pageRequest = PageRequestOverride.of(from, size);
+        validationUser(userId);
+        return commentsRepository.findCommentOrderByUserId(userId, pageRequest)
+                .stream()
+                .map(CommentsMapper::toCommentDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
     public CommentsDto createdComment(Long eventId, CommentsDto commentsDto) {
+        LocalDateTime created = LocalDateTime.now();
         validationBodyComment(commentsDto);
-        validationEvent(eventId);
-        User user = validationUser(commentsDto.getUser());
+        Event event = validationEvent(eventId);
+        User user = validationUser(commentsDto.getUser().getId());
         Comments comments = CommentsMapper.toComment(commentsDto);
         comments.setUser(user);
+        comments.setEvent(event);
+        comments.setPublishedOn(created);
         commentsRepository.save(comments);
         return CommentsMapper.toCommentDto(commentsRepository.save(comments));
     }
@@ -81,11 +89,7 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     @Transactional
     public void deleteComments(Long eventId) {
-        //Event event = validationEvent(eventId);
-        //event.getCommentsList().removeAll(event.getCommentsList());
-        //int bound = event.getCommentsList().size();
-        //for (int i = 0; i < bound; i++) {
-        //}
+        commentsRepository.deleteCommentOrderByEventId(eventId);
     }
 
     @Override

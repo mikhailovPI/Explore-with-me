@@ -9,13 +9,11 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import ru.pracricum.ewmservice.categories.dto.CategoriesDto;
-import ru.pracricum.ewmservice.comments.model.Comments;
 import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.event.model.Location;
 import ru.pracricum.ewmservice.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -59,8 +57,6 @@ public class EventFullDto {
     EventState state;
 
     String title;
-
-    List<Comments> commentsList;
 
     Long views;
 }
