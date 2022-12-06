@@ -65,7 +65,7 @@ public class CommentsServiceImpl implements CommentsService {
         LocalDateTime created = LocalDateTime.now();
         validationBodyComment(commentsDto);
         Event event = validationEvent(eventId);
-        User user = validationUser(commentsDto.getUser().getId());
+        User user = validationUser(commentsDto.getUser());
         Comments comments = CommentsMapper.toComment(commentsDto);
         comments.setUser(user);
         comments.setEvent(event);

@@ -31,7 +31,6 @@ public class Comments {
     public final static String COMMENT_EVENT_ID = "event_id";
     public final static String COMMENT_PUBLISHED_ON = "created_on";
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = COMMENT_ID)
