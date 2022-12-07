@@ -6,11 +6,15 @@ import org.springframework.web.bind.annotation.*;
 import ru.pracricum.ewmservice.comments.dto.CommentsDto;
 import ru.pracricum.ewmservice.comments.service.CommentsService;
 
+import static ru.pracricum.ewmservice.comments.controller.CommentsPrivateController.URL_PRIVATE_COMMENTS;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/events/{eventId}/comments")
+@RequestMapping(path = URL_PRIVATE_COMMENTS)
 @Slf4j
 public class CommentsPrivateController {
+
+    public final static String URL_PRIVATE_COMMENTS = "/events/{eventId}/comments";
 
     private final CommentsService commentsService;
 
@@ -18,8 +22,8 @@ public class CommentsPrivateController {
     public CommentsDto createComment(
             @PathVariable Long eventId,
             @RequestBody CommentsDto commentsDto) {
-        log.info("URL: /events/{eventId}/comments. " +
-                "PostMapping/Создание комментария " + commentsDto + "/createComment");
+        log.info("URL: " + URL_PRIVATE_COMMENTS + ". " +
+                " PostMapping/Создание комментария " + commentsDto + "/createComment");
         return commentsService.createdComment(eventId, commentsDto);
     }
 
@@ -28,25 +32,8 @@ public class CommentsPrivateController {
             @PathVariable Long eventId,
             @PathVariable Long commentId,
             @RequestBody CommentsDto commentsDto) {
-        log.info("URL: /events/{eventId}/comments. " +
-                "PatchMapping/Обновления комментария " + commentId + "/patchComment");
+        log.info("URL: " + URL_PRIVATE_COMMENTS + "{commentId}." +
+                " PatchMapping/Обновления комментария " + commentId + "/patchComment");
         return commentsService.patchComment(eventId, commentId, commentsDto);
     }
-
-    @DeleteMapping
-    public void deleteComments(@PathVariable Long eventId) {
-        log.info("URL: /events/{eventId}/comments. " +
-                "DeleteMapping/Удаление всех комментариев у события " + eventId + "/deleteComments");
-        commentsService.deleteComments(eventId);
-    }
-
-    @DeleteMapping(path = "/{commentId}")
-    public void deleteCommentById(
-            @PathVariable Long eventId,
-            @PathVariable Long commentId) {
-        log.info("URL: /events/{eventId}/comments/{commentId}. " +
-                "DeleteMapping/Удаления комментария " + commentId + "/deleteCommentById");
-        commentsService.deleteCommentById(eventId, commentId);
-    }
-
 }

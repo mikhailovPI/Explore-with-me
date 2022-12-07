@@ -2,7 +2,6 @@ package ru.pracricum.ewmservice.event.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.pracricum.ewmservice.comments.model.Comments;
 import ru.pracricum.ewmservice.event.model.Event;
 import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.util.PageRequestOverride;

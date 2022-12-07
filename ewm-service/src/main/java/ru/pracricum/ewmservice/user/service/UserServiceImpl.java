@@ -59,22 +59,6 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
     }
 
-    @Override
-    public void putLikes(Long userId, Long valuerId) {
-//        User user = validationUser(userId);
-//        User valuerUser = validationUser(valuerId);
-//        Long likes = user.getLikes();
-//        user.setLikes(likes+1);
-
-    }
-
-
-
-    @Override
-    public void deleteLikes(Long userId, Long valuerId) {
-
-    }
-
     private static void validationBodyUser(NewUserRequest userDto) {
         if (userDto.getEmail() == null) {
             throw new ValidationException("E-mail не должен быть пустым.");

@@ -3,27 +3,32 @@ package ru.pracricum.ewmservice.comments.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.pracricum.ewmservice.comments.dto.CommentsDto;
 import ru.pracricum.ewmservice.comments.service.CommentsService;
 
-import java.util.List;
+import static ru.pracricum.ewmservice.comments.controller.CommentsAdminController.URL_ADMIN_COMMENTS;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/user/{userId}/comments")
+@RequestMapping(path = URL_ADMIN_COMMENTS)
 @Slf4j
 public class CommentsAdminController {
 
     private final CommentsService commentsService;
+    public final static String URL_ADMIN_COMMENTS = "/events/{eventId}/comments";
 
-    @GetMapping
-    public List<CommentsDto> getCommentsByUser(
-            @PathVariable Long userId,
-            @RequestParam(name = "from", defaultValue = "0") int from,
-            @RequestParam(name = "size", defaultValue = "10") int size) {
-        log.info("URL: /user/{userId}/comments. " +
-                "GetMapping/Получение комментарие пользователя " + userId
-                + "/getCommentsByUser");
-        return commentsService.getCommentsByUser(userId, from, size);
+    @DeleteMapping
+    public void deleteComments(@PathVariable Long eventId) {
+        log.info("URL: " + URL_ADMIN_COMMENTS + ". " +
+                "DeleteMapping/Удаление всех комментариев у события " + eventId + "/deleteComments");
+        commentsService.deleteComments(eventId);
+    }
+
+    @DeleteMapping(path = "/{commentId}")
+    public void deleteCommentById(
+            @PathVariable Long eventId,
+            @PathVariable Long commentId) {
+        log.info("URL: " + URL_ADMIN_COMMENTS + "/{commentId}. " +
+                "DeleteMapping/Удаления комментария " + commentId + "/deleteCommentById");
+        commentsService.deleteCommentById(eventId, commentId);
     }
 }

@@ -17,7 +17,6 @@ import ru.pracricum.ewmservice.requests.mapper.RequestMapper;
 import ru.pracricum.ewmservice.requests.model.ParticipationStatus;
 import ru.pracricum.ewmservice.requests.model.Requests;
 import ru.pracricum.ewmservice.requests.repository.RequestsRepository;
-//import ru.pracricum.ewmservice.stats.client.StatsClient;
 import ru.pracricum.ewmservice.stats.client.StatsClient;
 import ru.pracricum.ewmservice.stats.dto.EndpointHit;
 import ru.pracricum.ewmservice.user.model.User;
@@ -70,7 +69,6 @@ public class EventServiceImpl implements EventService {
         } else {
             events = eventRepository.findByText(text);
         }
-
         return events
                 .stream()
                 .map(EventMapper::toEventShortDto)

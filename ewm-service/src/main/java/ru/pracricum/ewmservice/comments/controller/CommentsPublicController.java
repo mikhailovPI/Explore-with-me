@@ -10,32 +10,44 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/events/{eventId}/comments")
 @Slf4j
 public class CommentsPublicController {
 
     private final CommentsService commentsService;
 
-    @GetMapping
+    public final static String URL_PUBLIC_COMMENTS_USER = "/user/{userId}/comments";
+    public final static String URL_PUBLIC_COMMENTS = "/events/{eventId}/comments";
+
+
+    @GetMapping(path = URL_PUBLIC_COMMENTS)
     public List<CommentsDto> getComments(
             @PathVariable Long eventId,
             @RequestParam(name = "from", defaultValue = "0") int from,
             @RequestParam(name = "size", defaultValue = "10") int size) {
-        log.info("URL: /events/{eventId}/comments. GetMapping/Получение всех комментарием события " + eventId
+        log.info("URL: " + URL_PUBLIC_COMMENTS + ". GetMapping/Получение всех комментарием события " + eventId
                 + "/getComments");
         return commentsService.getComments(eventId, from, size);
     }
 
-    @GetMapping(path = "/{commentId}")
+    @GetMapping(path = URL_PUBLIC_COMMENTS + "/{commentId}")
     public CommentsDto getCommentById(
             @PathVariable Long eventId,
             @PathVariable Long commentId) {
-        log.info("URL: /events/{eventId}/comments/{commentId}. " +
+        log.info("URL: " + URL_PUBLIC_COMMENTS + "/{commentId}. " +
                 "GetMapping/Получение комментария " + commentId +
                 " события " + eventId
                 + "/getCommentById");
         return commentsService.getCommentById(eventId, commentId);
     }
 
-
+    @GetMapping(path = URL_PUBLIC_COMMENTS_USER)
+    public List<CommentsDto> getCommentsByUser(
+            @PathVariable Long userId,
+            @RequestParam(name = "from", defaultValue = "0") int from,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
+        log.info("URL: /user/{userId}/comments. " +
+                "GetMapping/Получение комментарие пользователя " + userId
+                + "/getCommentsByUser");
+        return commentsService.getCommentsByUser(userId, from, size);
+    }
 }

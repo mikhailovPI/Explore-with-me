@@ -14,8 +14,4 @@ public class UserDto {
     String name;
 
     String email;
-
-//    Long likes;
-//
-//    Long dislikes;
 }

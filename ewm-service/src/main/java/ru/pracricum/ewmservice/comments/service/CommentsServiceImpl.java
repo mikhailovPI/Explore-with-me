@@ -95,7 +95,6 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     @Transactional
     public void deleteCommentById(Long eventId, Long commentId) {
-        validationEvent(eventId);
         commentsRepository.deleteById(commentId);
     }
 

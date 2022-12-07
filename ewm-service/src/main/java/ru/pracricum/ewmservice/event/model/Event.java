@@ -9,13 +9,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import ru.pracricum.ewmservice.categories.model.Categories;
-import ru.pracricum.ewmservice.comments.model.Comments;
 import ru.pracricum.ewmservice.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static ru.pracricum.ewmservice.categories.model.Categories.CATEGORIES_ID;
 import static ru.pracricum.ewmservice.event.model.Event.SCHEMA_TABLE;
@@ -47,9 +44,6 @@ public class Event {
     public final static String EVENTS_REQUEST_MODERATION = "request_moderation";
     public final static String EVENTS_STATE = "state";
     public final static String EVENTS_COMMENTS = "comment_id";
-
-//    public final static String EVENTS_LIKES = "likes";
-//    public final static String EVENTS_DISLIKES = "dislikes";
     public final static String EVENTS_TITLE = "title";
 
     @Id
@@ -107,12 +101,6 @@ public class Event {
     @Enumerated(EnumType.STRING)
     @Column(name = EVENTS_STATE)
     EventState state;
-
-/*    @Column(name = EVENTS_LIKES)
-    Long likes;
-
-    @Column(name = EVENTS_DISLIKES)
-    Long dislikes;*/
 
     @Column(name = EVENTS_TITLE)
     String title;
