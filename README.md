@@ -19,7 +19,7 @@
 
 Данные хранятся в БД. Схема БД представлена ниже.
 
-> ![db.png](info/db.png)
+> ![db.png](java-explore-with-me/info/db.png)
 
 Примеры Endpoint запросов (программа написана на Java):
 
