@@ -9,6 +9,7 @@ import ru.pracricum.ewmservice.comments.mapper.CommentsMapper;
 import ru.pracricum.ewmservice.comments.model.Comments;
 import ru.pracricum.ewmservice.comments.repository.CommentsRepository;
 import ru.pracricum.ewmservice.event.model.Event;
+import ru.pracricum.ewmservice.event.model.EventState;
 import ru.pracricum.ewmservice.event.repository.EventRepository;
 import ru.pracricum.ewmservice.exception.NotFoundException;
 import ru.pracricum.ewmservice.user.model.User;
@@ -65,13 +66,17 @@ public class CommentsServiceImpl implements CommentsService {
         LocalDateTime created = LocalDateTime.now();
         validationBodyComment(commentsDto);
         Event event = validationEvent(eventId);
-        User user = validationUser(commentsDto.getUser());
-        Comments comments = CommentsMapper.toComment(commentsDto);
-        comments.setUser(user);
-        comments.setEvent(event);
-        comments.setPublishedOn(created);
-        commentsRepository.save(comments);
-        return CommentsMapper.toCommentDto(commentsRepository.save(comments));
+        if(event.getState().equals(EventState.PUBLISHED)) {
+            User user = validationUser(commentsDto.getUser());
+            Comments comments = CommentsMapper.toComment(commentsDto);
+            comments.setUser(user);
+            comments.setEvent(event);
+            comments.setPublishedOn(created);
+            commentsRepository.save(comments);
+            return CommentsMapper.toCommentDto(commentsRepository.save(comments));
+        } else {
+            throw new NotFoundException("Событие не опубликовано. Оставить комментарий невозможно");
+        }
     }
 
     @Override
@@ -95,6 +100,7 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     @Transactional
     public void deleteCommentById(Long eventId, Long commentId) {
+        validationEvent(eventId);
         commentsRepository.deleteById(commentId);
     }
 
