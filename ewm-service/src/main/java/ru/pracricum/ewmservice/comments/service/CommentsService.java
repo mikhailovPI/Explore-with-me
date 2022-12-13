@@ -16,9 +16,9 @@ public interface CommentsService {
 
     CommentsDto createdComment(Long eventId, CommentsDto commentsDto);
 
-    CommentsDto patchComment(Long eventId, Long commentId, CommentsDto commentsDto);
+    CommentsDto patchComment(Long eventId, Long commentId, Long userId, CommentsDto commentsDto);
 
     void deleteComments(Long eventId);
 
-    void deleteCommentById(Long eventId, Long commentId);
+    void deleteCommentById(Long eventId, Long commentId, Long userId);
 }

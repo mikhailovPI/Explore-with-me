@@ -66,7 +66,7 @@ public class CommentsServiceImpl implements CommentsService {
         LocalDateTime created = LocalDateTime.now();
         validationBodyComment(commentsDto);
         Event event = validationEvent(eventId);
-        if(event.getState().equals(EventState.PUBLISHED)) {
+        if (event.getState().equals(EventState.PUBLISHED)) {
             User user = validationUser(commentsDto.getUser());
             Comments comments = CommentsMapper.toComment(commentsDto);
             comments.setUser(user);
@@ -75,20 +75,24 @@ public class CommentsServiceImpl implements CommentsService {
             commentsRepository.save(comments);
             return CommentsMapper.toCommentDto(commentsRepository.save(comments));
         } else {
-            throw new NotFoundException("Событие не опубликовано. Оставить комментарий невозможно");
+            throw new NotFoundException(
+                    String.format("Событие %s опубликовано. Оставить комментарий невозможно.", eventId));
         }
     }
 
     @Override
     @Transactional
-    public CommentsDto patchComment(Long eventId, Long commentId, CommentsDto commentsDto) {
-        validationEvent(eventId);
-        validationBodyComment(commentsDto);
-        Comments comments = validationComments(commentId);
-        comments.setText(commentsDto.getText());
-        Comments comments1 = commentsRepository.save(comments);
-
-        return CommentsMapper.toCommentDto(comments1);
+    public CommentsDto patchComment(Long eventId, Long commentId, Long userId, CommentsDto commentsDto) {
+        if (commentsDto.getUser().equals(userId)) {
+            validationEvent(eventId);
+            validationBodyComment(commentsDto);
+            Comments comments = validationComments(commentId);
+            comments.setText(commentsDto.getText());
+            Comments comments1 = commentsRepository.save(comments);
+            return CommentsMapper.toCommentDto(comments1);
+        } else {
+            throw new NotFoundException(
+                    String.format("Пользователь %s не может обновить чужой комментарий.", userId));        }
     }
 
     @Override
@@ -99,9 +103,15 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional
-    public void deleteCommentById(Long eventId, Long commentId) {
-        validationEvent(eventId);
-        commentsRepository.deleteById(commentId);
+    public void deleteCommentById(Long eventId, Long commentId, Long userId) {
+        Comments comments = validationComments(commentId);
+        if (comments.getUser().getId().equals(userId)) {
+            validationEvent(eventId);
+            commentsRepository.deleteById(commentId);
+        } else {
+            throw new NotFoundException(
+                    String.format("Пользователь %s не может удалить чужой комментарий.", userId));
+        }
     }
 
     private Event validationEvent(Long eventId) {

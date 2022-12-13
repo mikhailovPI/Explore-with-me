@@ -27,13 +27,14 @@ public class CommentsPrivateController {
         return commentsService.createdComment(eventId, commentsDto);
     }
 
-    @PatchMapping(path = "/{commentId}")
+    @PatchMapping(path = "/{commentId}/users/{userId}")
     public CommentsDto patchComment(
             @PathVariable Long eventId,
             @PathVariable Long commentId,
+            @PathVariable Long userId,
             @RequestBody CommentsDto commentsDto) {
         log.info("URL: " + URL_PRIVATE_COMMENTS + "{commentId}." +
                 " PatchMapping/Обновления комментария " + commentId + "/patchComment");
-        return commentsService.patchComment(eventId, commentId, commentsDto);
+        return commentsService.patchComment(eventId, commentId, userId, commentsDto);
     }
 }

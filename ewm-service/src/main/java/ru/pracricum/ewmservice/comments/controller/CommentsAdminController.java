@@ -23,12 +23,13 @@ public class CommentsAdminController {
         commentsService.deleteComments(eventId);
     }
 
-    @DeleteMapping(path = "/{commentId}")
+    @DeleteMapping(path = "/{commentId}/users/{userId}")
     public void deleteCommentById(
             @PathVariable Long eventId,
-            @PathVariable Long commentId) {
+            @PathVariable Long commentId,
+            @PathVariable Long userId) {
         log.info("URL: " + URL_ADMIN_COMMENTS + "/{commentId}. " +
                 "DeleteMapping/Удаления комментария " + commentId + "/deleteCommentById");
-        commentsService.deleteCommentById(eventId, commentId);
+        commentsService.deleteCommentById(eventId, commentId, userId);
     }
 }
