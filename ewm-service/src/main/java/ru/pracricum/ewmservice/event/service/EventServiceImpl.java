@@ -69,7 +69,6 @@ public class EventServiceImpl implements EventService {
         } else {
             events = eventRepository.findByText(text);
         }
-
         return events
                 .stream()
                 .map(EventMapper::toEventShortDto)

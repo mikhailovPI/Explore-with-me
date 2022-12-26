@@ -59,4 +59,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             List<Long> usersId,
             List<EventState> eventStates,
             PageRequestOverride pageRequest);
+
 }

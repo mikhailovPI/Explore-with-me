@@ -21,12 +21,12 @@ import static ru.pracricum.ewmservice.compilation.model.Compilation.SCHEMA_TABLE
 @Table(name = Compilation.TABLE_COMPILATION, schema = SCHEMA_TABLE)
 public class Compilation {
 
-    public final static String TABLE_COMPILATION = "compilation";
-    public final static String SCHEMA_TABLE = "public";
-    public final static String COMPILATION_ID = "compilation_id";
-    public final static String COMPILATION_PINNED = "pinned";
-    public final static String COMPILATION_TITLE = "title";
-    public final static String COMPILATION_COMPILATION_OF_EVENTS = "compilation_of_events";
+    public static final String TABLE_COMPILATION = "compilation";
+    public static final String SCHEMA_TABLE = "public";
+    public static final String COMPILATION_ID = "compilation_id";
+    public static final String COMPILATION_PINNED = "pinned";
+    public static final String COMPILATION_TITLE = "title";
+    public static final String COMPILATION_COMPILATION_OF_EVENTS = "compilation_of_events";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

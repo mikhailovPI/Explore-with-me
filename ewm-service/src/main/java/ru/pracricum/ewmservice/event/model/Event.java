@@ -28,22 +28,23 @@ import static ru.pracricum.ewmservice.user.model.User.USERS_ID;
 @Validated
 public class Event {
 
-    public final static String TABLE_EVENTS = "events";
-    public final static String SCHEMA_TABLE = "public";
-    public final static String EVENTS_ID = "event_id";
-    public final static String EVENTS_ANNOTATION = "event_annotation";
-    public final static String EVENTS_CONFORMED_REQUESTS = "conformed_requests";
-    public final static String EVENTS_CREATED_ON = "created_on";
-    public final static String EVENTS_DESCRIPTION = "event_description";
-    public final static String EVENTS_DATE = "event_date";
-    public final static String EVENTS_LAT = "lat";
-    public final static String EVENTS_LON = "lon";
-    public final static String EVENTS_PAID = "paid";
-    public final static String EVENTS_PARTICIPANT_LIMIT = "participant_limit";
-    public final static String EVENTS_PUBLISHED_ON = "published_on";
-    public final static String EVENTS_REQUEST_MODERATION = "request_moderation";
-    public final static String EVENTS_STATE = "state";
-    public final static String EVENTS_TITLE = "title";
+    public static final String TABLE_EVENTS = "events";
+    public static final String SCHEMA_TABLE = "public";
+    public static final String EVENTS_ID = "event_id";
+    public static final String EVENTS_ANNOTATION = "event_annotation";
+    public static final String EVENTS_CONFORMED_REQUESTS = "conformed_requests";
+    public static final String EVENTS_CREATED_ON = "created_on";
+    public static final String EVENTS_DESCRIPTION = "event_description";
+    public static final String EVENTS_DATE = "event_date";
+    public static final String EVENTS_LAT = "lat";
+    public static final String EVENTS_LON = "lon";
+    public static final String EVENTS_PAID = "paid";
+    public static final String EVENTS_PARTICIPANT_LIMIT = "participant_limit";
+    public static final String EVENTS_PUBLISHED_ON = "published_on";
+    public static final String EVENTS_REQUEST_MODERATION = "request_moderation";
+    public static final String EVENTS_STATE = "state";
+    public static final String EVENTS_COMMENTS = "comment_id";
+    public static final String EVENTS_TITLE = "title";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

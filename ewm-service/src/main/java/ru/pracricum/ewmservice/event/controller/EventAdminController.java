@@ -20,7 +20,7 @@ public class EventAdminController {
 
     private final EventService eventService;
 
-    private final static String URL_EVENT_ADMIN = "/{eventId}";
+    private static final String URL_EVENT_ADMIN = "/{eventId}";
 
     @GetMapping
     public List<EventFullDto> searchEvents(
