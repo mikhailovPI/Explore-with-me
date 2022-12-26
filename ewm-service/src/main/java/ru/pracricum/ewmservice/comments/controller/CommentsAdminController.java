@@ -14,7 +14,7 @@ import static ru.pracricum.ewmservice.comments.controller.CommentsAdminControlle
 public class CommentsAdminController {
 
     private final CommentsService commentsService;
-    public final static String URL_ADMIN_COMMENTS = "/events/{eventId}/comments";
+    public static final String URL_ADMIN_COMMENTS = "/events/{eventId}/comments";
 
     @DeleteMapping
     public void deleteComments(@PathVariable Long eventId) {

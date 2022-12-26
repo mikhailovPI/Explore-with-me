@@ -24,11 +24,11 @@ import static ru.pracricum.ewmservice.user.model.User.USERS_ID;
 @Table(name = TABLE_REQUESTS, schema = SCHEMA_TABLE)
 public class Requests {
 
-    public final static String TABLE_REQUESTS = "request";
-    public final static String SCHEMA_TABLE = "public";
-    public final static String REQUESTS_ID = "request_id";
-    public final static String REQUESTS_CREATED = "created";
-    public final static String REQUESTS_STATE = "state";
+    public static final String TABLE_REQUESTS = "request";
+    public static final String SCHEMA_TABLE = "public";
+    public static final String REQUESTS_ID = "request_id";
+    public static final String REQUESTS_CREATED = "created";
+    public static final String REQUESTS_STATE = "state";
 
 
     @Id

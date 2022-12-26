@@ -14,7 +14,7 @@ import static ru.pracricum.ewmservice.comments.controller.CommentsPrivateControl
 @Slf4j
 public class CommentsPrivateController {
 
-    public final static String URL_PRIVATE_COMMENTS = "/events/{eventId}/comments";
+    public static final String URL_PRIVATE_COMMENTS = "/events/{eventId}/comments";
 
     private final CommentsService commentsService;
 

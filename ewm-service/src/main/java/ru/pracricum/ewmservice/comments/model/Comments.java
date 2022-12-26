@@ -23,13 +23,13 @@ import static ru.pracricum.ewmservice.categories.model.Categories.SCHEMA_TABLE;
 @Table(name = Comments.TABLE_COMMENTS, schema = SCHEMA_TABLE)
 public class Comments {
 
-    public final static String TABLE_COMMENTS = "comments";
-    public final static String SCHEMA_TABLE = "public";
-    public final static String COMMENT_ID = "comment_id";
-    public final static String COMMENT_TEXT = "comment_text";
-    public final static String COMMENT_USER_ID = "user_id";
-    public final static String COMMENT_EVENT_ID = "event_id";
-    public final static String COMMENT_PUBLISHED_ON = "created_on";
+    public static final String TABLE_COMMENTS = "comments";
+    public static final String SCHEMA_TABLE = "public";
+    public static final String COMMENT_ID = "comment_id";
+    public static final String COMMENT_TEXT = "comment_text";
+    public static final String COMMENT_USER_ID = "user_id";
+    public static final String COMMENT_EVENT_ID = "event_id";
+    public static final String COMMENT_PUBLISHED_ON = "created_on";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

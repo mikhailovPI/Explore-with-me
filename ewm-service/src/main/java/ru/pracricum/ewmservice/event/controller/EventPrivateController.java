@@ -21,9 +21,8 @@ import java.util.List;
 public class EventPrivateController {
 
     private final EventService eventService;
-
-    private final static String URL_EVENT_PRIVATE = "/{eventId}";
-    private final static String URL_EVENT_PRIVATE_REQUEST = "/{eventId}/requests/{reqId}";
+    private static final String URL_EVENT_PRIVATE = "/{eventId}";
+    private static final String URL_EVENT_PRIVATE_REQUEST = "/{eventId}/requests/{reqId}";
 
     @GetMapping
     public List<EventShortDto> getEventsByUser(

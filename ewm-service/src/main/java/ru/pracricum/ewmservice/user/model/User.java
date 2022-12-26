@@ -18,13 +18,11 @@ import static ru.pracricum.ewmservice.user.model.User.TABLE_USERS;
 @Table(name = TABLE_USERS, schema = User.SCHEMA_TABLE)
 public class User {
 
-    public final static String TABLE_USERS = "users";
-    public final static String SCHEMA_TABLE = "public";
-    public final static String USERS_ID = "user_id";
-    public final static String USERS_NAME = "user_name";
-    public final static String USERS_EMAIL = "email";
-    public final static String USERS_LIKES = "likes";
-    public final static String USERS_DISLIKES = "dislikes";
+    public static final String TABLE_USERS = "users";
+    public static final String SCHEMA_TABLE = "public";
+    public static final String USERS_ID = "user_id";
+    public static final String USERS_NAME = "user_name";
+    public static final String USERS_EMAIL = "email";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

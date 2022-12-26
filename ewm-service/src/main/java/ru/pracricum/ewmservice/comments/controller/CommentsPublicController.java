@@ -15,8 +15,8 @@ public class CommentsPublicController {
 
     private final CommentsService commentsService;
 
-    public final static String URL_PUBLIC_COMMENTS_USER = "/user/{userId}/comments";
-    public final static String URL_PUBLIC_COMMENTS = "/events/{eventId}/comments";
+    public static final String URL_PUBLIC_COMMENTS_USER = "/user/{userId}/comments";
+    public static final String URL_PUBLIC_COMMENTS = "/events/{eventId}/comments";
 
 
     @GetMapping(path = URL_PUBLIC_COMMENTS)
