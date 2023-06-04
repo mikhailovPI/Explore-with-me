@@ -2,7 +2,7 @@
 
 **Программа позволяет делиться информацией о событиях (концерты/выставки/походы), получать информацию о событиях: подборки, поиск, оставлять комментарии.**
 
-**Используемые стек: Java 17, Spring Boot, Spring JPA, Maven, PostgreSQL, Docker**
+**Используемый стек: Java 17, Spring Boot, Spring JPA, Maven, PostgreSQL, Docker**
 
 **Программа имеет два сервера: ewm-sercice и stats-server.**
 
